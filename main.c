@@ -19,7 +19,7 @@ typedef struct { //Estructura principal del archivo, dividida en subestructuras.
 
 
     struct {
-        char  actividad_base [50];
+        char actividad_base [50];
         char modalidad  [50];
         char centro [50];
         char tipo_uso  [50];
@@ -86,6 +86,9 @@ while(opcion_listado < 1 || opcion_listado >6){
 
 switch (opcion_listado){
     case 1: 
+        printf("1. Por centro");
+        printf("2. Por horas");
+        printf("3. Por tipo de actividad");
     case 2: 
     case 3: 
     case 4: 
