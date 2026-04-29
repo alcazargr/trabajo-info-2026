@@ -2,7 +2,6 @@
 #include <string.h>
 #define N 10000
 
-
 typedef struct { //Estructura principal del archivo, dividida en subestructuras.
     struct {
         int anio;
@@ -32,6 +31,8 @@ typedef struct { //Estructura principal del archivo, dividida en subestructuras.
         int libres;
     } aforo;
 } Registro;
+//a partir de aquí y antes del main están los prototipos de funciones
+void listado_opciones();
 
 int main ()
 {
@@ -55,12 +56,27 @@ fscanf(ARCHIVO, "%d %d %d %s %s %s %s %s %s %d %d %d %s" , &vector_informacion[i
 i++;
 } //Bucle de lectura del archivo
 
-
-
 // COdigo para printear una linea del archivo: NO BORRAR. printf("%d %d %d %s %s %s %s %s %s %d %d %d %s" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
 
-
+printf("BIENVENIDO AL CENTRO DE GESTIÓN DE DATOS DEPORTIVOS\n");
+printf("---------------------------------------------------\n");
+printf("Presione cualquier tecla para ingresar:");
+getchar();
+printf("\nAccediendo...\n");
+listado_opciones(); //llamamos a la funcion listado_opciones
+int opcion_listado;
+scanf("&d", &opcion_listado);
 
 
 return 0;
+}
+
+void listado_opciones(){
+    printf("Listado de opciones\n");
+    printf("-------------------\n");
+    printf("1. Lista de actividades\n");
+    printf("2. Estadísticas\n");
+    printf("3. Resumen por centro\n");
+    printf("4. Resumen por fecha\n");
+    printf("5. Modificar el fichero\n"); 
 }
