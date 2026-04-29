@@ -66,7 +66,15 @@ printf("\nAccediendo...\n");
 listado_opciones(); //llamamos a la funcion listado_opciones
 int opcion_listado;
 scanf("&d", &opcion_listado);
+switch (opcion_listado){
 
+    case 1: 
+    case 2: 
+    case 3: 
+    case 4: 
+    case 5:
+    default:
+}
 
 return 0;
 }
