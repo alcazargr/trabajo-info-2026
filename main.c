@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h> //para usar la función sleep para el delay (accediendo...) al acceder al programa
 #define N 10000
 
 typedef struct { //Estructura principal del archivo, dividida en subestructuras.
@@ -62,19 +63,66 @@ printf("BIENVENIDO AL CENTRO DE GESTIÓN DE DATOS DEPORTIVOS\n");
 printf("---------------------------------------------------\n");
 printf("Presione cualquier tecla para ingresar:");
 getchar();
-printf("\nAccediendo...\n");
+printf("\nAccediendo");
+fflush(stdout);
+    for (int i = 0; i < 3; i++) {
+        sleep(1);
+        printf(".");
+        fflush(stdout);
+    }
+sleep(1);
+printf("\n");
+
+int salida = 0; //variable bandera (justificación en el comentario justo debajo)
+do{ // bucle para que cuando el usuario cancele la salida del programa este vuelva al inicio
 listado_opciones(); //llamamos a la funcion listado_opciones
 int opcion_listado;
-scanf("&d", &opcion_listado);
-switch (opcion_listado){
+scanf("%d", &opcion_listado);
 
+while(opcion_listado < 1 || opcion_listado >6){
+    printf("Ingrese una opcion valida: ");
+    scanf("%d", &opcion_listado);
+}
+
+switch (opcion_listado){
     case 1: 
     case 2: 
     case 3: 
     case 4: 
     case 5:
+    case 6: 
+        
+        char opcion_salida;
+
+        printf("Desea salir? (Y/N):\n");
+        scanf(" %c", &opcion_salida);
+
+        while((opcion_salida != 'y') && (opcion_salida != 'Y') && (opcion_salida != 'n') && (opcion_salida != 'N')){
+            printf("Elija una opcion valida:\n");
+            scanf(" %c", &opcion_salida);
+        }
+        
+        if(opcion_salida == 'y' || opcion_salida == 'Y'){
+            salida = 1;
+        }
+        else if (opcion_salida == 'n' || opcion_salida == 'N' ){
+            printf("Cancelando salida. Regresando al menu");
+            
+            fflush(stdout);
+            for (int i = 0; i < 3; i++) {
+                sleep(1);
+                printf(".");
+                fflush(stdout);
+            }
+            sleep(1);
+            printf("\n");
+        }
+
     default:
+        break;
 }
+
+}while(salida == 0);
 
 return 0;
 }
@@ -87,4 +135,5 @@ void listado_opciones(){
     printf("3. Resumen por centro\n");
     printf("4. Resumen por fecha\n");
     printf("5. Modificar el fichero\n"); 
+    printf("6. Salir\n"); 
 }
