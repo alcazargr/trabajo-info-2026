@@ -181,7 +181,7 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
     for (i=0; i<=total_lineas-1; i++ )
     {
         repetido = 0;
-        for(j = 0; j <resultado.num_centros; j++) 
+        for(j = 0; j <resultado.num_centros; j++) //Comprueba que ese centro (el del elemento i) no este ya en ningun elemento del vector "resultado."
         {
             if(strcmp(resultado.centros[j].centro, vector_informacion[i].actividad.centro) == 0) //Ambos strings son iguales (el centro ya esta repetido)
             {
@@ -190,7 +190,7 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
             }
         }
 
-        if(repetido == 0) 
+        if(repetido == 0) //Si el centro no esta en ningun elemento del vector resultado, se copia en el actual, pues es nuevo.
         {
             strcpy(resultado.centros[resultado.num_centros].centro, vector_informacion[i].actividad.centro);
             resultado.num_centros++;
