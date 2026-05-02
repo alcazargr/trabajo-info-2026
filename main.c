@@ -50,6 +50,7 @@ typedef struct {
 
 
 void listado_opciones();
+void bienvenida();
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
 int Opcion_1 (Registro vector_informacion[], int total_lineas);
@@ -86,19 +87,7 @@ i++;
 int total_lineas= i;
 // COdigo para printear una linea del archivo: NO BORRAR. printf("%d %d %d %s %s %s %s %s %s %d %d %d %s" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
 
-printf("BIENVENIDO AL CENTRO DE GESTIÓN DE DATOS DEPORTIVOS\n");
-printf("---------------------------------------------------\n");
-printf("Presione cualquier tecla para ingresar:");
-getchar();
-printf("\nAccediendo");
-fflush(stdout);
-    for (int i = 0; i < 3; i++) {
-        sleep(1);
-        printf(".");
-        fflush(stdout);
-    }
-sleep(1);
-printf("\n");
+bienvenida(); //funcion bienvenida
 
 int salida = 0; //variable bandera (justificación en el comentario justo debajo)
 do{ // bucle para que cuando el usuario cancele la salida del programa este vuelva al inicio
@@ -155,6 +144,23 @@ return 0;
 }
 
 //FUNCIONES (EN ORDEN DE APARICION:)
+
+void bienvenida(){
+    printf("BIENVENIDO AL CENTRO DE GESTIÓN DE DATOS DEPORTIVOS\n");
+    printf("---------------------------------------------------\n");
+    printf("Presione cualquier tecla para ingresar:");
+    getchar();
+    printf("\nAccediendo");
+    fflush(stdout);
+        for (int i = 0; i < 3; i++) {
+            sleep(1);
+            printf(".");
+            fflush(stdout);
+        }
+    sleep(1);
+    printf("\n"); 
+}
+
 
 
 void listado_opciones(){
