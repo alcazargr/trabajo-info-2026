@@ -49,7 +49,7 @@ typedef struct {
 
 
 void bienvenida();
-void listado_opciones();
+int listado_opciones();
 void listado_actividades();
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
@@ -90,18 +90,24 @@ int total_lineas= i;
 // COdigo para printear una linea del archivo: NO BORRAR. printf("%d %d %d %s %s %s %s %s %s %d %d %d %s" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
 
 bienvenida(); //funcion bienvenida
+do{
+int opcion_listado = listado_opciones();  //llamamos a la funcion listado_opciones
+int opcion_case1; // variables provisionales para los subcasos dentro de cada case del switch
+int opcion_case2;
+int opcion_case3;
+int opcion_case4;
+int opcion_case5;
 
-int salida = 0; //variable bandera (justificación en el comentario justo debajo)
-do{ // bucle para que cuando el usuario cancele la salida del programa este vuelva al inicio
-
-listado_opciones(); //llamamos a la funcion listado_opciones
 
 switch (opcion_listado){
     case 1: 
-        void listado_actividades();
+        listado_actividades();
+        scanf("%d", &opcion_case1);
+        fflush(stdin);
+
         if(opcion_case1 == 1){
             printf("Aquí tiene el listado de actividades por centro:\n");
-            int Opcion_1 (Registro vector_informacion[], int total_lineas);
+            Opcion_1(vector_informacion, total_lineas);
         }
         if(opcion_case1 == 2){
             printf("Aquí tiene el listado de actividades por día:\n");
@@ -112,19 +118,24 @@ switch (opcion_listado){
         if(opcion_case1 == 4){
             printf("Aquí tiene el listado de actividades por tipo de actividad:\n");
         }
+        break;
     case 2: 
-        void estadisticas();
+        estadisticas();
+        break;
     case 3: 
+        break;
     case 4: 
+        break;
     case 5:
+        break;
     case 6: 
-        salida = confirmar_salida();
+        printf("Hasta pronto!\n");
+        printf("-------------\n");
+        break;
     default:
         break;
 }
-
-}while(salida == 0);
-
+}while(opcion_listado != 6);
 return 0;
 }
 
@@ -133,8 +144,9 @@ return 0;
 void bienvenida(){
     printf("BIENVENIDO AL CENTRO DE GESTIÓN DE DATOS DEPORTIVOS\n");
     printf("---------------------------------------------------\n");
-    printf("Presione cnter para ingresar:");
+    printf("Presione cualquier tecla para ingresar:");
     getchar();
+    fflush(stdin);
     printf("\nAccediendo");
     fflush(stdout);
         for (int i = 0; i < 3; i++) {
@@ -147,7 +159,7 @@ void bienvenida(){
 }
 
 
-void listado_opciones(){
+int listado_opciones(){
     int opcion_listado;
     printf("Listado de opciones\n");
     printf("-------------------\n");
@@ -158,19 +170,22 @@ void listado_opciones(){
     printf("5. Modificar el fichero\n"); 
     printf("6. Salir\n"); 
     scanf("%d", &opcion_listado);
+    fflush(stdin);
     
     while(opcion_listado < 1 || opcion_listado >6){
         printf("Ingrese una opcion valida: ");
         scanf("%d", &opcion_listado);
+        fflush(stdin);
     }
+    return opcion_listado;
 }
 
 void listado_actividades(){
-    printf("Lista de actividades por:");
-    printf("1. Centro");
-    printf("2. Días");
-    printf("3. Horas");
-    printf("4. Tipo de actividad");
+    printf("Lista de actividades por:\n");
+    printf("1. Centro\n");
+    printf("2. Días\n");
+    printf("3. Horas\n");
+    printf("4. Tipo de actividad\n");
 }
 
 void estadisticas(){
@@ -183,39 +198,12 @@ void estadisticas(){
     printf("5. Centro con mayor oferta");
     printf("6. Eficiencia de los centros");
     scanf("%d", &opcion_estadisticas);
+    fflush(stdin);
 }
 
-int confirmar_salida(){
-
-        char opcion_salida;
-
-        printf("Desea salir? (Y/N):\n");
-        scanf(" %c", &opcion_salida);
-
-        while((opcion_salida != 'y') && (opcion_salida != 'Y') && (opcion_salida != 'n') && (opcion_salida != 'N')){
-            printf("Elija una opcion valida:\n");
-            scanf(" %c", &opcion_salida);
-        }
-        
-        if(opcion_salida == 'y' || opcion_salida == 'Y'){
-            return 1;
-        }
-        else if (opcion_salida == 'n' || opcion_salida == 'N' ){
-            printf("Cancelando salida. Regresando al menu");
-            
-            fflush(stdout);
-            for (int i = 0; i < 3; i++) {
-                sleep(1);
-                printf(".");
-                fflush(stdout);
-            }
-            sleep(1);
-            printf("\n");
-            return 0;
-        }
+ 
     
 
-}
 
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
 {    
@@ -281,7 +269,9 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
         printf("\nSeleccione un centro:\t");
             
         fflush(stdout);
-        scanf(" %c" ,&opcion);      
+        scanf(" %c" ,&opcion);  
+        fflush(stdin);
+
         switch(opcion)
         {
             case 's':
@@ -329,4 +319,3 @@ int Opcion_1(Registro vector_informacion[], int total_lineas) //Funcion de la op
 
 
 }
-
