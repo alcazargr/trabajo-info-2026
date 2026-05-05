@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h> //para usar la función sleep para el delay (accediendo...) al acceder al programa
 //#include <stdlib.h> //Para usar la funcion atoi, que pasa un numero string a entero
 #define N 10000
 
@@ -50,7 +49,7 @@ typedef struct {
 
 void bienvenida();
 int listado_opciones();
-void listado_actividades();
+int filtro_case1();
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
 int Opcion_1 (Registro vector_informacion[], int total_lineas);
@@ -101,8 +100,7 @@ int opcion_case5;
 
 switch (opcion_listado){
     case 1: 
-        listado_actividades();
-        scanf("%d", &opcion_case1);
+        opcion_case1 = filtro_case1();
         fflush(stdin);
 
         if(opcion_case1 == 1){
@@ -149,13 +147,7 @@ void bienvenida(){
     fflush(stdin);
     printf("\nAccediendo");
     fflush(stdout);
-        for (int i = 0; i < 3; i++) {
-            sleep(1);
-            printf(".");
-            fflush(stdout);
-        }
-    sleep(1);
-    printf("\n"); 
+    printf("\n");
 }
 
 
@@ -180,12 +172,22 @@ int listado_opciones(){
     return opcion_listado;
 }
 
-void listado_actividades(){
+int filtro_case1(){
+    int opcion_case1;
     printf("Lista de actividades por:\n");
     printf("1. Centro\n");
     printf("2. Días\n");
     printf("3. Horas\n");
     printf("4. Tipo de actividad\n");
+    scanf("%d", &opcion_case1);
+    fflush(stdin);
+    
+    while(opcion_case1< 1 || opcion_case1>4){
+        printf("Ingrese una opcion valida: ");
+        scanf("%d", &opcion_case1);
+        fflush(stdin);
+    }
+    return opcion_case1;
 }
 
 void estadisticas(){
