@@ -192,13 +192,13 @@ int filtro_case1(){
 
 void estadisticas(){
     int opcion_estadisticas;
-    printf("Estadisticas:");
-    printf("1. Ocupación media");
-    printf("2. Horas pico según actividad");
-    printf("3. Actividad con más demanda");
-    printf("4. Actividad con menos demanda");
-    printf("5. Centro con mayor oferta");
-    printf("6. Eficiencia de los centros");
+    printf("Estadisticas:\n");
+    printf("1. Ocupación media\n");
+    printf("2. Horas pico según actividad\n");
+    printf("3. Actividad con más demanda\n");
+    printf("4. Actividad con menos demanda\n");
+    printf("5. Centro con mayor oferta\n");
+    printf("6. Eficiencia de los centros\n");
     scanf("%d", &opcion_estadisticas);
     fflush(stdin);
 }
@@ -318,6 +318,12 @@ int Opcion_1(Registro vector_informacion[], int total_lineas) //Funcion de la op
 {
     Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
     int centro_seleccionado = F_selector_centros (Centros);
-
-
+    
+    for(int i = 0; i<=total_lineas-1; i++)
+    {
+        if (centro_seleccionado == -1 || strcmp(vector_informacion[i].actividad.centro, Centros.centros[centro_seleccionado].centro) == 0)
+        {
+            printf("%d %d %d %s %s %s %s %s %s %d %d %d %s\n" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+        }
+    }
 }
