@@ -257,16 +257,12 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
             I = i+9*(pag-1); //El maximo de I son 62, el numero de elementos de ese vector. Esta hardcodeado  por simplicidad.
             printf("\n%d: \t %s" ,i+1 ,Centros.centros[I].centro);
         }
-        if (pag ==1)
-        {
-            printf("\n\n S: \t Pagina siguiente");
-
-        }
-        else if (pag == 7)
-        {   
-            printf("\n 0: \t todos");
-            printf("\n\n A: \tPagina anterior");
-        }
+    if (pag < 7)
+        printf("\n\n S: \t Pagina siguiente");
+    if (pag > 1)
+        printf("\n A: \t Pagina anterior");
+    if (pag == 7)
+        printf("\n 0: \t Todos los centros");
 
         printf("\nSeleccione un centro:\t");
             
