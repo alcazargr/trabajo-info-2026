@@ -49,12 +49,12 @@ typedef struct {
 
 void bienvenida();
 int listado_opciones();
-int filtro_case1();
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
-int Opcion_1 (Registro vector_informacion[], int total_lineas);
+void Opcion_1 (Registro vector_informacion[], int total_lineas);
+float Ocupacion_media(Registro vector_informacion[], int total_lineas);
 
-void estadisticas();
+void Opcion_2();
 
 
 //Funcion main:
@@ -72,53 +72,31 @@ ARCHIVO = fopen("deportes_ayuntamiento.txt" , "r");
 if (ARCHIVO == NULL)
 {
     printf("ERROR: No se ha podido abrir el archivo. Comprueba el nombre y la carpeta.\n");
-    return 0;
+    return 0;	
 }
 fscanf(ARCHIVO, "%*[^\n]\n"); //Se salta la linea de los headers.
 
 
 int i = 0;
-while(fscanf(ARCHIVO, "%d %d %d %s %s %s %s %s %s %d %d %d %s" , &vector_informacion[i].fecha.anio , &vector_informacion[i].fecha.mes, &vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, &vector_informacion[i].aforo.plazas, &vector_informacion[i].aforo.ocupadas, &vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso) != EOF)
+while(fscanf(ARCHIVO, "%d %d %d %s %s %s %s %s %s %d %d %d %s", &vector_informacion[i].fecha.anio, &vector_informacion[i].fecha.mes, &vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base, vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, &vector_informacion[i].aforo.plazas, &vector_informacion[i].aforo.ocupadas, &vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso) == 13)  // Bucle de lectura del archivo. Cuando no de los 13 campos, es que habra terminado el archivo.
 {
-   
-fscanf(ARCHIVO, "%d %d %d %s %s %s %s %s %s %d %d %d %s" , &vector_informacion[i].fecha.anio , &vector_informacion[i].fecha.mes, &vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, &vector_informacion[i].aforo.plazas, &vector_informacion[i].aforo.ocupadas, &vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
-i++;
-
-} //Bucle de lectura del archivo
-int total_lineas= i;
+    i++;
+}
+int total_lineas = i;
 // COdigo para printear una linea del archivo: NO BORRAR. printf("%d %d %d %s %s %s %s %s %s %d %d %d %s" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
 
 bienvenida(); //funcion bienvenida
+int opcion_listado;
 do{
-int opcion_listado = listado_opciones();  //llamamos a la funcion listado_opciones
-int opcion_case1; // variables provisionales para los subcasos dentro de cada case del switch
-int opcion_case2;
-int opcion_case3;
-int opcion_case4;
-int opcion_case5;
+opcion_listado = listado_opciones();  //llamamos a la funcion listado_opciones
 
 
 switch (opcion_listado){
     case 1: 
-        opcion_case1 = filtro_case1();
-        fflush(stdin);
-
-        if(opcion_case1 == 1){
-            printf("Aquí tiene el listado de actividades por centro:\n");
-            Opcion_1(vector_informacion, total_lineas);
-        }
-        if(opcion_case1 == 2){
-            printf("Aquí tiene el listado de actividades por día:\n");
-        }
-        if(opcion_case1 == 3){
-            printf("Aquí tiene el listado de actividades por horas:\n");
-        }
-        if(opcion_case1 == 4){
-            printf("Aquí tiene el listado de actividades por tipo de actividad:\n");
-        }
+        Opcion_1(vector_informacion, total_lineas);
         break;
     case 2: 
-        estadisticas();
+        Opcion_2();
         break;
     case 3: 
         break;
@@ -133,7 +111,7 @@ switch (opcion_listado){
     default:
         break;
 }
-}while(opcion_listado != 6);
+}while(opcion_listado != 4);
 return 0;
 }
 
@@ -144,9 +122,7 @@ void bienvenida(){
     printf("---------------------------------------------------\n");
     printf("Presione cualquier tecla para ingresar:");
     getchar();
-    fflush(stdin);
     printf("\nAccediendo");
-    fflush(stdout);
     printf("\n");
 }
 
@@ -157,40 +133,19 @@ int listado_opciones(){
     printf("-------------------\n");
     printf("1. Lista de actividades\n");
     printf("2. Estadísticas\n");
-    printf("3. Resumen por centro\n");
-    printf("4. Resumen por fecha\n");
-    printf("5. Modificar el fichero\n"); 
-    printf("6. Salir\n"); 
+    printf("3. Modificar el fichero\n"); 
+    printf("4. Salir\n"); 
     scanf("%d", &opcion_listado);
-    fflush(stdin);
     
-    while(opcion_listado < 1 || opcion_listado >6){
+    while(opcion_listado < 1 || opcion_listado >4){
         printf("Ingrese una opcion valida: ");
         scanf("%d", &opcion_listado);
-        fflush(stdin);
     }
     return opcion_listado;
 }
 
-int filtro_case1(){
-    int opcion_case1;
-    printf("Lista de actividades por:\n");
-    printf("1. Centro\n");
-    printf("2. Días\n");
-    printf("3. Horas\n");
-    printf("4. Tipo de actividad\n");
-    scanf("%d", &opcion_case1);
-    fflush(stdin);
-    
-    while(opcion_case1< 1 || opcion_case1>4){
-        printf("Ingrese una opcion valida: ");
-        scanf("%d", &opcion_case1);
-        fflush(stdin);
-    }
-    return opcion_case1;
-}
 
-void estadisticas(){
+void Opcion_2(){
     int opcion_estadisticas;
     printf("Estadisticas:\n");
     printf("1. Ocupación media\n");
@@ -203,8 +158,26 @@ void estadisticas(){
     fflush(stdin);
 }
 
- 
-    
+float Ocupacion_media(Registro vector_informacion[], int total_lineas)
+{
+	Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
+	int centro_seleccionado = F_selector_centros (Centros); //Funcion que permite al usuario seleccionar un centro en concreto o todos. Se usara para filtrar los centros a la hora de calcular la ocupacion media.
+	
+	//POR TERMINAR 
+	if(centro_seleccionado
+
+	for (i = 0; i < total_lineas; i++)
+	{
+		total_plazas += vector_informacion[i].aforo.plazas;
+		total_ocupadas += vector_informacion[i].aforo.ocupadas;
+	}
+
+	if (total_plazas == 0) {
+		return 0.0; // Evitar división por cero
+	}
+
+	return (float)total_ocupadas / total_plazas * 100; // Devuelve el porcentaje de ocupación media
+}
 
 
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
@@ -255,7 +228,8 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
         for (i = 0; i<=8; i++)
         { 
             I = i+9*(pag-1); //El maximo de I son 62, el numero de elementos de ese vector. Esta hardcodeado  por simplicidad.
-            printf("\n%d: \t %s" ,i+1 ,Centros.centros[I].centro);
+
+			printf("\n%d: \t %s" ,i+1 ,Centros.centros[I].centro);
         }
     if (pag < 7)
         printf("\n\n S: \t Pagina siguiente");
@@ -310,16 +284,12 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
     }
 return centro_seleccionado;
 }
-int Opcion_1(Registro vector_informacion[], int total_lineas) //Funcion de la opcion 1 (Listado de actividades):
+void Opcion_1(Registro vector_informacion[], int total_lineas) //Funcion de la opcion 1 (Listado de actividades):
 {
     Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
     int centro_seleccionado = F_selector_centros (Centros);
     
-    for(int i = 0; i<=total_lineas-1; i++)
-    {
-        if (centro_seleccionado == -1 || strcmp(vector_informacion[i].actividad.centro, Centros.centros[centro_seleccionado].centro) == 0)
-        {
-            printf("%d %d %d %s %s %s %s %s %s %d %d %d %s\n" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
-        }
-    }
+
+
+
 }
