@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 //#include <stdlib.h> //Para usar la funcion atoi, que pasa un numero string a entero
-#define N 10000
+#define N 5001
 
 typedef struct { //Estructura principal del archivo, dividida en subestructuras.
     struct {
@@ -53,7 +53,8 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
 int F_selector_centros (Lista_Centros Centros);
 void Opcion_1 (Registro vector_informacion[], int total_lineas);
 float Ocupacion_media(Registro vector_informacion[], int total_lineas);
-
+float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_linea);
+float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_linea, char centro[]);
 void Opcion_2();
 
 
@@ -101,10 +102,6 @@ switch (opcion_listado){
     case 3: 
         break;
     case 4: 
-        break;
-    case 5:
-        break;
-    case 6: 
         printf("Hasta pronto!\n");
         printf("-------------\n");
         break;
@@ -118,7 +115,7 @@ return 0;
 //FUNCIONES (EN ORDEN DE APARICION:)
 
 void bienvenida(){
-    printf("BIENVENIDO AL CENTRO DE GESTIÓN DE DATOS DEPORTIVOS\n");
+    printf("BIENVENIDO AL CENTRO DE GESTIoN DE DATOS DEPORTIVOS\n");
     printf("---------------------------------------------------\n");
     printf("Presione cualquier tecla para ingresar:");
     getchar();
@@ -132,7 +129,7 @@ int listado_opciones(){
     printf("Listado de opciones\n");
     printf("-------------------\n");
     printf("1. Lista de actividades\n");
-    printf("2. Estadísticas\n");
+    printf("2. Estadisticas\n");
     printf("3. Modificar el fichero\n"); 
     printf("4. Salir\n"); 
     scanf("%d", &opcion_listado);
@@ -148,37 +145,59 @@ int listado_opciones(){
 void Opcion_2(){
     int opcion_estadisticas;
     printf("Estadisticas:\n");
-    printf("1. Ocupación media\n");
-    printf("2. Horas pico según actividad\n");
-    printf("3. Actividad con más demanda\n");
+    printf("1. Ocupacion media\n");
+    printf("2. Horas pico segun actividad\n");
+    printf("3. Actividad con mas demanda\n");
     printf("4. Actividad con menos demanda\n");
     printf("5. Centro con mayor oferta\n");
     printf("6. Eficiencia de los centros\n");
     scanf("%d", &opcion_estadisticas);
-    fflush(stdin);
 }
 
-float Ocupacion_media(Registro vector_informacion[], int total_lineas)
+float Ocupacion_media(Registro vector_informacion[], int total_lineas) //por terminar
 {
 	Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
 	int centro_seleccionado = F_selector_centros (Centros); //Funcion que permite al usuario seleccionar un centro en concreto o todos. Se usara para filtrar los centros a la hora de calcular la ocupacion media.
 	
-	//POR TERMINAR 
-	if(centro_seleccionado
-
-	for (i = 0; i < total_lineas; i++)
-	{
-		total_plazas += vector_informacion[i].aforo.plazas;
-		total_ocupadas += vector_informacion[i].aforo.ocupadas;
-	}
-
-	if (total_plazas == 0) {
-		return 0.0; // Evitar división por cero
-	}
-
-	return (float)total_ocupadas / total_plazas * 100; // Devuelve el porcentaje de ocupación media
+	if(centro_seleccionado == -1) //Si el usuario ha seleccionado todos los centros, se calcula la ocupacion media de todos los centros.
+    {
+        return Ocupacion_media_todos_centros(vector_informacion, total_lineas);
+    }
+    else //Si el usuario ha seleccionado un centro en concreto, se calcula la ocupacion media de ese centro.
+    {
+        return Ocupacion_media_centro_especifico(vector_informacion, total_lineas, Centros.centros[centro_seleccionado].centro);
+    }
 }
 
+float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_linea){
+    int i;
+    float ocupacion_media_todos;
+    int total_plazas = 0;
+    int total_ocupadas = 0;
+
+    for(i = 0; i <total_linea; i++){
+        total_plazas += vector_informacion[i].aforo.plazas;
+        total_ocupadas += vector_informacion[i].aforo.ocupadas;
+    }
+    ocupacion_media_todos =((total_ocupadas*1.0) / (total_plazas))*100;
+    return ocupacion_media_todos;
+}
+float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_lineas, char centro[]) //por terminar
+{
+    int i;
+    float ocupacion_media_centro;
+    int total_plazas = 0;
+    int total_ocupadas = 0;
+
+    for(i = 0; i< total_lineas; i++){
+        if(strcmp(vector_informacion[i].actividad.centro, centro) == 0){
+            total_plazas += vector_informacion[i].aforo.plazas;
+            total_ocupadas += vector_informacion[i].aforo.ocupadas;
+        }
+    }
+    ocupacion_media_centro = ((total_ocupadas*1.0)/(total_plazas))*100;
+    return ocupacion_media_centro;
+}
 
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
 {    
@@ -289,7 +308,4 @@ void Opcion_1(Registro vector_informacion[], int total_lineas) //Funcion de la o
     Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
     int centro_seleccionado = F_selector_centros (Centros);
     
-
-
-
 }
