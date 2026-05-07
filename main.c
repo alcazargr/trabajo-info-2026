@@ -56,14 +56,19 @@ typedef struct {
 //Prototipos de funciones:
 
 int listado_opciones();
-Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas);
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
+Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
+int F_selector_actividades (Lista_Actividades Actividades);
 void Opcion_1 (Registro vector_informacion[], int total_lineas);
-int Opcion_2();
-float Ocupacion_media(Registro vector_informacion[], int total_lineas);
+int Opcion_2_1();
+int Opcion_2_2();
+float Ocupacion_media_centros(Registro vector_informacion[], int total_lineas);
 float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_linea);
 float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_linea, char centro[]);
+float Ocupacion_media_actividades(Registro vector_informacion[], int total_lineas);
+float Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas);
+float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[]);
 
 
 
@@ -95,8 +100,8 @@ int total_lineas = i;
 // COdigo para printear una linea del archivo: NO BORRAR. printf("%d %d %d %s %s %s %s %s %s %d %d %d %s" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
 
 int opcion_listado;
-int opcion_estadisticas;
-float resultado_opcion_2;
+int opcion_estadisticas_1, opcion_estadisticas_2;
+float resultado_opcion_centro;
 do{
 opcion_listado = listado_opciones();  //llamamos a la funcion listado_opciones
 
@@ -106,11 +111,24 @@ switch (opcion_listado){
         Opcion_1(vector_informacion, total_lineas);
         break;
     case 2: 
-        opcion_estadisticas = Opcion_2();
-        switch(opcion_estadisticas){
+        opcion_estadisticas_1 = Opcion_2_1();
+        switch(opcion_estadisticas_1){
             case 1:
-                resultado_opcion_2 = Ocupacion_media(vector_informacion, total_lineas);
-                printf("\nLa ocupacion media es de: %.2f por ciento\n", resultado_opcion_2);
+                opcion_estadisticas_2 = Opcion_2_2();
+                
+                if(opcion_estadisticas_2 == 1){
+                    resultado_opcion_centro = Ocupacion_media_centros(vector_informacion, total_lineas);
+                    printf("\nLa ocupacion media es de: %.2f por ciento\n", resultado_opcion_centro);
+                }
+                else if(opcion_estadisticas_2 == 2){
+
+                    printf("La ocupacion media es de: %.2f por ciento\n");
+                }
+
+                
+
+                printf("La ocupacion media es de: %.2f por ciento\n"); 
+
                 break;
             case 2:
                 break;
@@ -167,8 +185,8 @@ int listado_opciones(){
 }
 
 
-int Opcion_2(){
-    int opcion_estadisticas;
+int Opcion_2_1(){
+    int opcion_estadisticas_1;
     printf("Estadisticas:\n");
     printf("1. Ocupacion media\n");
     printf("2. Horas pico segun actividad\n");
@@ -176,11 +194,19 @@ int Opcion_2(){
     printf("4. Actividad con menos demanda\n");
     printf("5. Centro con mayor oferta\n");
     printf("6. Eficiencia de los centros\n");
-    scanf("%d", &opcion_estadisticas);
-    return opcion_estadisticas;
+    scanf("%d", &opcion_estadisticas_1);
+    return opcion_estadisticas_1;
+}
+int Opcion_2_2(){
+    int opcion_estadisticas_2;
+    printf("Seleccione el tipo de filtro:\n");
+    printf("1. Filtrar por centro\n");
+    printf("2. Filtrar por actividad\n");
+    scanf("%d", &opcion_estadisticas_2);
+    return opcion_estadisticas_2;
 }
 
-float Ocupacion_media(Registro vector_informacion[], int total_lineas) 
+float Ocupacion_media_centros(Registro vector_informacion[], int total_lineas) 
 {
 	Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
 	int centro_seleccionado = F_selector_centros (Centros); //Funcion que permite al usuario seleccionar un centro en concreto o todos. Se usara para filtrar los centros a la hora de calcular la ocupacion media.
@@ -208,7 +234,7 @@ float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_lin
     ocupacion_media_todos =((total_ocupadas*1.0) / (total_plazas))*100;
     return ocupacion_media_todos;
 }
-float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_lineas, char centro[]) //por terminar
+float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_lineas, char centro[])
 {
     int i;
     float ocupacion_media_centro;
@@ -225,10 +251,52 @@ float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total
     return ocupacion_media_centro;
 }
 
-float actividad_con_mas_demanda(Registro vector_informacion[], int total_lineas){
-    int i = 0;
+float Ocupacion_media_para_actividades(Registro vector_informacion[], int total_lineas)
+{
+    Lista_Actividades Actividades = Listado_de_actividades(vector_informacion, total_lineas);
+    int actividad_seleccionada = F_selector_actividades (Actividades);
+
+    if(actividad_seleccionada == -1){
+        return Ocupacion_media_todas_actividades(vector_informacion, total_lineas);
+    }
+    else{
+        return Ocupacion_media_actividad_especifica(vector_informacion, total_lineas, Actividades.actividades[actividad_seleccionada].actividad);
+    }
+}
+
+float Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas){
+    int i;
+    float ocupacion_media_todas_actividades;
     int total_plazas = 0;
-    int 
+    int total_ocupadas = 0;
+
+    for(i = 0; i<total_lineas; i++){
+        total_plazas += vector_informacion[i].aforo.plazas;
+        total_ocupadas += vector_informacion[i].aforo.ocupadas;
+    }
+    ocupacion_media_todas_actividades = ((total_ocupadas*1.0)/(total_plazas))*100;
+    return ocupacion_media_todas_actividades;
+
+}
+
+float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[]){
+    int i = 0;
+    float ocupacion_media_actividad_especifica;
+    int total_plazas = 0;
+    int total_ocupadas = 0;
+
+    for(i = 0; i<total_lineas;i++){
+        if(strcmp(vector_informacion[i].actividad.actividad_base, actividad) == 0){
+            total_plazas += vector_informacion[i].aforo.plazas;
+            total_ocupadas += vector_informacion[i].aforo.ocupadas;
+        }
+    }
+    ocupacion_media_actividad_especifica = ((total_ocupadas*1.0)/(total_plazas))*100;
+    return ocupacion_media_actividad_especifica;
+}
+
+float actividad_con_mas_demanda(Registro vector_informacion[], int total_lineas){ 
+    // POR TERMINAR
 }
 
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
@@ -365,4 +433,78 @@ void Opcion_1(Registro vector_informacion[], int total_lineas) //Funcion de la o
     Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
     int centro_seleccionado = F_selector_centros (Centros);
     
+}
+
+int F_selector_actividades (Lista_Actividades Actividades) 
+{
+
+    printf("Seleccione la actividad de interes:\n");
+    int i = 0;
+    int pag = 1;
+    int I = 0;
+    char opcion;
+    int bandera = 0;
+    int numero_seleccionado;
+    int actividad_seleccionada;
+
+    while(pag>=1&&pag<=7&&bandera ==0) //El maximo de paginas son 7, pues hay 63 centros.Esta hardcodeado  por simplicidad.
+    {
+        for (i = 0; i<=8; i++)
+        { 
+            I = i+9*(pag-1); //El maximo de I son 62, el numero de elementos de ese vector. Esta hardcodeado  por simplicidad.
+
+			printf("\n%d: \t %s" ,i+1 ,Actividades.actividades[I].actividad);
+        }
+    if (pag < 7)
+        printf("\n\n S: \t Pagina siguiente");
+    if (pag > 1)
+        printf("\n A: \t Pagina anterior");
+    if (pag == 7)
+        printf("\n 0: \t Todas las actividades");
+
+        printf("\nSeleccione una actividad:\t");
+            
+        fflush(stdout);
+        scanf(" %c" ,&opcion);  
+        fflush(stdin);
+
+        switch(opcion)
+        {
+            case 's':
+            case 'S':
+            if (pag!= 7)
+                {
+                    pag++;
+                }
+                break;
+            case 'a':
+            case 'A':
+            if (pag!= 1)
+                {
+                    pag--;
+                }                
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                numero_seleccionado = opcion - '0';
+                actividad_seleccionada = numero_seleccionado+9*(pag-1);
+                bandera = 1;
+                break;
+            case '0':
+                actividad_seleccionada = -1;
+                bandera = 1;
+                break;
+            default:
+                printf("La opcion seleccionada no es valida");
+                break;
+        }
+    }
+return actividad_seleccionada;
 }
