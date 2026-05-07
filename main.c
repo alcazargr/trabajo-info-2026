@@ -35,25 +35,36 @@ typedef struct { //Estructura principal del archivo, dividida en subestructuras.
 
 typedef struct { //Estructura para guardar un centro centros .
         char centro [50];
-} unidad;
+} unidad_centro;
 
 typedef struct {
-    unidad centros[63];   //Estructura que contiene las 63 estructuras del tipo del struct anterior. Lo he hecho asi para evitar usar matrices, pues cada unidad es un string.
+    unidad_centro centros[63];   //Estructura que contiene las 63 estructuras del tipo del struct anterior. Lo he hecho asi para evitar usar matrices, pues cada unidad es un string.
     int num_centros;     
 } Lista_Centros;
+
+typedef struct{
+    char actividad[50];
+} unidad_actividad;
+
+typedef struct {
+    unidad_actividad actividades[100];
+    int num_actividades;
+} Lista_Actividades;
 
 
 
 //Prototipos de funciones:
 
 int listado_opciones();
+Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas);
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
 void Opcion_1 (Registro vector_informacion[], int total_lineas);
+int Opcion_2();
 float Ocupacion_media(Registro vector_informacion[], int total_lineas);
 float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_linea);
 float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_linea, char centro[]);
-int Opcion_2();
+
 
 
 //Funcion main:
@@ -85,6 +96,7 @@ int total_lineas = i;
 
 int opcion_listado;
 int opcion_estadisticas;
+float resultado_opcion_2;
 do{
 opcion_listado = listado_opciones();  //llamamos a la funcion listado_opciones
 
@@ -95,8 +107,26 @@ switch (opcion_listado){
         break;
     case 2: 
         opcion_estadisticas = Opcion_2();
-        Ocupacion_media(vector_informacion, total_lineas);
-        break;
+        switch(opcion_estadisticas){
+            case 1:
+                resultado_opcion_2 = Ocupacion_media(vector_informacion, total_lineas);
+                printf("\nLa ocupacion media es de: %.2f por ciento\n", resultado_opcion_2);
+                break;
+            case 2:
+                break;
+            case 3:
+
+                printf("La actividad con mas demanda es: \n");
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            default:
+                break;
+        }
     case 3: 
         break;
     case 4: 
@@ -114,7 +144,7 @@ return 0;
 
 
 int listado_opciones(){
-    printf("BIENVENIDO AL CENTRO DE GESTIoN DE DATOS DEPORTIVOS\n");
+    printf("BIENVENIDO AL CENTRO DE GESTION DE DATOS DEPORTIVOS DE MADRID\n");
     printf("---------------------------------------------------\n");
     printf("Presione cualquier tecla para ingresar:");
     getchar();
@@ -195,6 +225,12 @@ float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total
     return ocupacion_media_centro;
 }
 
+float actividad_con_mas_demanda(Registro vector_informacion[], int total_lineas){
+    int i = 0;
+    int total_plazas = 0;
+    int 
+}
+
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
 {    
     Lista_Centros resultado;
@@ -226,10 +262,35 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
 
     }
 
+Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas)
+{
+    Lista_Actividades resultado;
+    int i;
+    int j;
+    resultado.num_actividades = 0;
+    int repetido;
+
+    for(i = 0; i<total_lineas; i++){
+        repetido = 0;
+        for(j = 0; j<resultado.num_actividades; j++){
+
+            if(strcmp(resultado.actividades[j].actividad, vector_informacion[i].actividad.actividad_base) == 0){
+                repetido = 1,;
+                break;
+            }
+        }
+        if(repetido == 0){
+            strcpy(resultado.actividades[resultado.num_actividades].actividad, vector_informacion[i].actividad.actividad_base);
+            resultado.num_actividades++;
+        }
+    }
+    return resultado;
+}
+
 int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar un centro en concreto o todos.
 {
 
-    printf("Seleccione el centro de interés:\n");
+    printf("Seleccione el centro de interes:\n");
     int i = 0;
     int pag = 1;
     int I = 0;
