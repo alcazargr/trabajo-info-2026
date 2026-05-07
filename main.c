@@ -46,8 +46,6 @@ typedef struct {
 
 //Prototipos de funciones:
 
-
-void bienvenida();
 int listado_opciones();
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
@@ -55,11 +53,10 @@ void Opcion_1 (Registro vector_informacion[], int total_lineas);
 float Ocupacion_media(Registro vector_informacion[], int total_lineas);
 float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_linea);
 float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_linea, char centro[]);
-void Opcion_2();
+int Opcion_2();
 
 
 //Funcion main:
-
 
 
 int main ()
@@ -86,8 +83,8 @@ while(fscanf(ARCHIVO, "%d %d %d %s %s %s %s %s %s %d %d %d %s", &vector_informac
 int total_lineas = i;
 // COdigo para printear una linea del archivo: NO BORRAR. printf("%d %d %d %s %s %s %s %s %s %d %d %d %s" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
 
-bienvenida(); //funcion bienvenida
 int opcion_listado;
+int opcion_estadisticas;
 do{
 opcion_listado = listado_opciones();  //llamamos a la funcion listado_opciones
 
@@ -97,7 +94,8 @@ switch (opcion_listado){
         Opcion_1(vector_informacion, total_lineas);
         break;
     case 2: 
-        Opcion_2();
+        opcion_estadisticas = Opcion_2();
+        Ocupacion_media(vector_informacion, total_lineas);
         break;
     case 3: 
         break;
@@ -114,17 +112,14 @@ return 0;
 
 //FUNCIONES (EN ORDEN DE APARICION:)
 
-void bienvenida(){
+
+int listado_opciones(){
     printf("BIENVENIDO AL CENTRO DE GESTIoN DE DATOS DEPORTIVOS\n");
     printf("---------------------------------------------------\n");
     printf("Presione cualquier tecla para ingresar:");
     getchar();
-    printf("\nAccediendo");
     printf("\n");
-}
 
-
-int listado_opciones(){
     int opcion_listado;
     printf("Listado de opciones\n");
     printf("-------------------\n");
@@ -142,7 +137,7 @@ int listado_opciones(){
 }
 
 
-void Opcion_2(){
+int Opcion_2(){
     int opcion_estadisticas;
     printf("Estadisticas:\n");
     printf("1. Ocupacion media\n");
@@ -152,9 +147,10 @@ void Opcion_2(){
     printf("5. Centro con mayor oferta\n");
     printf("6. Eficiencia de los centros\n");
     scanf("%d", &opcion_estadisticas);
+    return opcion_estadisticas;
 }
 
-float Ocupacion_media(Registro vector_informacion[], int total_lineas) //por terminar
+float Ocupacion_media(Registro vector_informacion[], int total_lineas) 
 {
 	Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
 	int centro_seleccionado = F_selector_centros (Centros); //Funcion que permite al usuario seleccionar un centro en concreto o todos. Se usara para filtrar los centros a la hora de calcular la ocupacion media.
@@ -233,7 +229,7 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
 int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar un centro en concreto o todos.
 {
 
-    printf("Seleccione el centro cuyas actividades quiera ver:\n");
+    printf("Seleccione el centro de interés:\n");
     int i = 0;
     int pag = 1;
     int I = 0;
