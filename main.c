@@ -275,7 +275,7 @@ Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int tota
         for(j = 0; j<resultado.num_actividades; j++){
 
             if(strcmp(resultado.actividades[j].actividad, vector_informacion[i].actividad.actividad_base) == 0){
-                repetido = 1,;
+                repetido = 1;
                 break;
             }
         }
