@@ -70,10 +70,14 @@ float Ocupacion_media_actividades(Registro vector_informacion[], int total_linea
 float Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas);
 float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[]);
 
-
+// Estadisticas
+void Horas_pico_actividad(Registro v[], int n);
+void Actividad_con_mas_demanda(Registro v[], int n);
+void Actividad_con_menos_demanda(Registro v[], int n);
+void Centro_con_mayor_oferta(Registro v[], int n);
+void Eficiencia_centros(Registro v[], int n);
 
 //Funcion main:
-
 
 int main ()
 {
@@ -113,7 +117,7 @@ switch (opcion_listado){
         break;
     case 2: 
         opcion_estadisticas_1 = Opcion_2_1();
-        switch(opcion_estadisticas_1){ //sub-switch case para la ocupacion media segun centro o actividad
+        switch(opcion_estadisticas_1){
             case 1:
                 opcion_estadisticas_2 = Opcion_2_2();
                 
@@ -122,22 +126,30 @@ switch (opcion_listado){
                     printf("\nLa ocupacion media es de: %.2f por ciento\n", resultado_opcion_centro);
                 }
                 else if(opcion_estadisticas_2 == 2){
-                    resultado_opcion_actividad = Ocupacion_media_actividades(vector_informacion, total_lineas);
-                    printf("La ocupacion media es de: %.2f por ciento\n", resultado_opcion_actividad);
+
+                    printf("La ocupacion media es de: %.2f por ciento\n");
                 }
+
+                
+
+                printf("La ocupacion media es de: %.2f por ciento\n"); 
 
                 break;
             case 2:
+            	Actividad_con_mas_demanda(vector_informacion, total_lineas);
                 break;
             case 3:
-
-                printf("La actividad con mas demanda es: \n");
+				Actividad_con_menos_demanda(vector_informacion, total_lineas);
+                printf("La actividad con menos demanda es: \n");
                 break;
             case 4:
+            	 Centro_con_mayor_oferta(vector_informacion, total_lineas);
                 break;
             case 5:
+            	Eficiencia_centros(vector_informacion, total_lineas);
                 break;
             case 6:
+            	Horas_pico_actividad(vector_informacion, total_lineas); //Esta por ver si se hace???
                 break;
             default:
                 break;
@@ -155,7 +167,6 @@ switch (opcion_listado){
 }while(opcion_listado != 4);
 return 0;
 }
-
 //FUNCIONES (EN ORDEN DE APARICION:)
 
 
@@ -293,9 +304,128 @@ float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int to
     return ocupacion_media_actividad_especifica;
 }
 
-//float actividad_con_mas_demanda(Registro vector_informacion[], int total_lineas){ 
-    // POR TERMINAR
-//}
+//NUEVO
+//Estadisticas completas(falta acbarlo)
+
+
+//Actividad_con_mas_demanda
+void Actividad_con_mas_demanda(Registro v[], int n) {
+    Lista_Actividades LA = Listado_de_actividades(v, n);
+
+    float max_ocup = -1;
+    char act_max[50];
+	int i;
+    for ( i = 0; i < LA.num_actividades; i++) {
+        float ocup = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
+        if (ocup > max_ocup) {
+            max_ocup = ocup;
+            strcpy(act_max, LA.actividades[i].actividad);
+        }
+    }
+
+    printf("\nActividad con mayor demanda: %s (%.2f%%)\n", act_max, max_ocup);
+}
+
+//Actividad_con_menos_demanda
+void Actividad_con_menos_demanda(Registro v[], int n) {
+    Lista_Actividades LA = Listado_de_actividades(v, n);
+
+    float min_ocup = 999999;
+    char act_min[50];
+	int i;
+    for ( i = 0; i < LA.num_actividades; i++) {
+        float ocup = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
+        if (ocup < min_ocup) {
+            min_ocup = ocup;
+            strcpy(act_min, LA.actividades[i].actividad);
+        }
+    }
+
+    printf("\nActividad con menor demanda: %s (%.2f%%)\n", act_min, min_ocup);
+}
+
+//Centro_con_mayor_oferta
+void Centro_con_mayor_oferta(Registro v[], int n) {
+    Lista_Centros LC = Listado_de_centros(v, n);
+
+    int i, j, max_plazas = -1;
+    char centro_max[50];
+	
+    for ( i = 0; i < LC.num_centros; i++) {
+        int plazas = 0;
+
+        for ( j = 0; j < n; j++) {
+            if (strcmp(v[j].actividad.centro, LC.centros[i].centro) == 0)
+                plazas += v[j].aforo.plazas;
+        }
+
+        if (plazas > max_plazas) {
+            max_plazas = plazas;
+            strcpy(centro_max, LC.centros[i].centro);
+        }
+    }
+
+    printf("\nCentro con mayor oferta: %s (%d plazas totales)\n", centro_max, max_plazas);
+}
+
+//Eficiencia_centros
+void Eficiencia_centros(Registro v[], int n) {
+    Lista_Centros LC = Listado_de_centros(v, n);
+
+    printf("\nEficiencia de los centros:\n");
+	int i;
+    for (i = 0; i < LC.num_centros; i++) {
+        float ocup = Ocupacion_media_centro_especifico(v, n, LC.centros[i].centro);
+        printf("- %s: %.2f%%\n", LC.centros[i].centro, ocup);
+    }
+}
+
+//Horas_pico_actividad
+void Horas_pico_actividad(Registro v[], int n) {
+    Lista_Actividades LA = Listado_de_actividades(v, n);
+    int act = F_selector_actividades(LA);
+
+    if (act == -1) {
+        printf("\nDebe seleccionar una actividad concreta.\n");
+        return;
+    }
+
+    char actividad[50];
+    strcpy(actividad, LA.actividades[act].actividad);
+
+    int ocup_hora[24] = {0};
+    int sesiones[24] = {0};
+	int i,h;
+    for (i = 0; i < n; i++) {
+        if (strcmp(v[i].actividad.actividad_base, actividad) == 0) {
+            h = atoi(v[i].horario.hora_ini);
+             if (h >= 0 && h < 24) {  // protección extra
+            ocup_hora[h] += v[i].aforo.ocupadas;
+            sesiones[h]++;
+        	}
+        }
+    }
+
+    int mejor_hora = -1;
+    float media, mejor_media = -1;
+
+    for (h = 0; h < 24; h++) {
+        if (sesiones[h] > 0) {
+            media = (float)ocup_hora[h] / sesiones[h];
+            if (media > mejor_media) {
+                mejor_media = media;
+                mejor_hora = h;
+            }
+        }
+    }
+	
+	if (mejor_hora != -1) {
+        printf("\nHora pico de %s: %02d:00 (media %.2f personas)\n",
+               actividad, mejor_hora, mejor_media);
+    } else {
+        printf("\nNo hay datos para la actividad %s\n", actividad);
+    }
+}
 
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
 {    
