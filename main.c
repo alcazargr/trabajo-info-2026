@@ -47,7 +47,7 @@ typedef struct{
 } unidad_actividad;
 
 typedef struct {
-    unidad_actividad actividades[100];
+    unidad_actividad actividades[200];
     int num_actividades;
 } Lista_Actividades;
 
@@ -101,7 +101,8 @@ int total_lineas = i;
 
 int opcion_listado;
 int opcion_estadisticas_1, opcion_estadisticas_2;
-float resultado_opcion_centro;
+float resultado_opcion_centro, resultado_opcion_actividad;
+
 do{
 opcion_listado = listado_opciones();  //llamamos a la funcion listado_opciones
 
@@ -112,7 +113,7 @@ switch (opcion_listado){
         break;
     case 2: 
         opcion_estadisticas_1 = Opcion_2_1();
-        switch(opcion_estadisticas_1){
+        switch(opcion_estadisticas_1){ //sub-switch case para la ocupacion media segun centro o actividad
             case 1:
                 opcion_estadisticas_2 = Opcion_2_2();
                 
@@ -121,13 +122,9 @@ switch (opcion_listado){
                     printf("\nLa ocupacion media es de: %.2f por ciento\n", resultado_opcion_centro);
                 }
                 else if(opcion_estadisticas_2 == 2){
-
-                    printf("La ocupacion media es de: %.2f por ciento\n");
+                    resultado_opcion_actividad = Ocupacion_media_actividades(vector_informacion, total_lineas);
+                    printf("La ocupacion media es de: %.2f por ciento\n", resultado_opcion_actividad);
                 }
-
-                
-
-                printf("La ocupacion media es de: %.2f por ciento\n"); 
 
                 break;
             case 2:
@@ -145,6 +142,7 @@ switch (opcion_listado){
             default:
                 break;
         }
+        break;
     case 3: 
         break;
     case 4: 
@@ -251,7 +249,7 @@ float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total
     return ocupacion_media_centro;
 }
 
-float Ocupacion_media_para_actividades(Registro vector_informacion[], int total_lineas)
+float Ocupacion_media_actividades(Registro vector_informacion[], int total_lineas)
 {
     Lista_Actividades Actividades = Listado_de_actividades(vector_informacion, total_lineas);
     int actividad_seleccionada = F_selector_actividades (Actividades);
@@ -295,9 +293,9 @@ float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int to
     return ocupacion_media_actividad_especifica;
 }
 
-float actividad_con_mas_demanda(Registro vector_informacion[], int total_lineas){ 
+//float actividad_con_mas_demanda(Registro vector_informacion[], int total_lineas){ 
     // POR TERMINAR
-}
+//}
 
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
 {    
@@ -386,7 +384,6 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
             
         fflush(stdout);
         scanf(" %c" ,&opcion);  
-        fflush(stdin);
 
         switch(opcion)
         {
@@ -447,32 +444,32 @@ int F_selector_actividades (Lista_Actividades Actividades)
     int numero_seleccionado;
     int actividad_seleccionada;
 
-    while(pag>=1&&pag<=7&&bandera ==0) //El maximo de paginas son 7, pues hay 63 centros.Esta hardcodeado  por simplicidad.
+    while(pag>=1&&pag<=21&&bandera ==0) //El maximo de paginas son 21, pues hay 189 actividades.Esta hardcodeado  por simplicidad.
     {
         for (i = 0; i<=8; i++)
         { 
-            I = i+9*(pag-1); //El maximo de I son 62, el numero de elementos de ese vector. Esta hardcodeado  por simplicidad.
+            I = i+9*(pag-1); //El maximo de I son 188, el numero de elementos de ese vector. Esta hardcodeado  por simplicidad.
 
 			printf("\n%d: \t %s" ,i+1 ,Actividades.actividades[I].actividad);
         }
-    if (pag < 7)
+    if (pag < 21)
         printf("\n\n S: \t Pagina siguiente");
     if (pag > 1)
         printf("\n A: \t Pagina anterior");
-    if (pag == 7)
+    if (pag == 21)
         printf("\n 0: \t Todas las actividades");
 
         printf("\nSeleccione una actividad:\t");
             
         fflush(stdout);
         scanf(" %c" ,&opcion);  
-        fflush(stdin);
+        
 
         switch(opcion)
         {
             case 's':
             case 'S':
-            if (pag!= 7)
+            if (pag!= 21)
                 {
                     pag++;
                 }
