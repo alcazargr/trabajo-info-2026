@@ -138,39 +138,35 @@ switch (opcion_listado){
                 
                 if(opcion_estadisticas_2 == 1){
                     resultado_opcion_centro = Ocupacion_media_centros(vector_informacion, total_lineas);
-                    printf("\nLa ocupacion media es de: %.2f por ciento\n", resultado_opcion_centro);
+                    printf("\nLa ocupacion media del centro es de: %.2f por ciento\n", resultado_opcion_centro);
                 }
                 else if(opcion_estadisticas_2 == 2){
-
-                    printf("La ocupacion media es de: %.2f por ciento\n");
+                    resultado_opcion_actividad = Ocupacion_media_actividades(vector_informacion, total_lineas);
+                    printf("La ocupacion media de la actividad es de: %.2f por ciento\n", resultado_opcion_actividad);
                 }
-
-                
-
-                printf("La ocupacion media es de: %.2f por ciento\n"); 
 
                 break;
             case 2:
-            	Actividad_con_mas_demanda(vector_informacion, total_lineas);
+                Horas_pico_actividad(vector_informacion, total_lineas); //Esta por ver si se hace???
                 break;
             case 3:
-				Actividad_con_menos_demanda(vector_informacion, total_lineas);
-                printf("La actividad con menos demanda es: \n");
-                break;
+                Actividad_con_mas_demanda(vector_informacion, total_lineas);
+				break;
             case 4:
-            	 Centro_con_mayor_oferta(vector_informacion, total_lineas);
+                Actividad_con_menos_demanda(vector_informacion, total_lineas);
                 break;
             case 5:
-            	Eficiencia_centros(vector_informacion, total_lineas);
+                Centro_con_mayor_oferta(vector_informacion, total_lineas);
                 break;
             case 6:
-            	Horas_pico_actividad(vector_informacion, total_lineas); //Esta por ver si se hace???
-                break;
+                Eficiencia_centros(vector_informacion, total_lineas);
+            	break;
             default:
                 break;
         }
         break;
     case 3: 
+    
         break;
     case 4: 
         printf("Hasta pronto!\n");
