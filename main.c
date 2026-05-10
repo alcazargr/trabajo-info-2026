@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-//#include <stdlib.h> //Para usar la funcion atoi, que pasa un numero string a entero
+#include <stdlib.h> //Para usar la funcion atoi, que pasa un numero string a entero
 #define N 5001
 
 typedef struct { //Estructura principal del archivo, dividida en subestructuras.
@@ -38,8 +38,8 @@ typedef struct { //Estructura para guardar un centro centros .
 } unidad_centro;
 
 typedef struct {
-    unidad_centro centros[63];   //Estructura que contiene las 63 estructuras del tipo del struct anterior. Lo he hecho asi para evitar usar matrices, pues cada unidad es un string.
-    int num_centros;     
+    unidad_centro centros[70];   //Estructura que contiene las estructuras del tipo del struct anterior. Lo he hecho asi para evitar usar matrices, pues cada unidad es un string.
+    int num_centros;     //Maximo de 70 centros
 } Lista_Centros;
 
 typedef struct{
@@ -47,19 +47,33 @@ typedef struct{
 } unidad_actividad;
 
 typedef struct {
-    unidad_actividad actividades[200];
+    unidad_actividad actividades[200]; //Maximo de actividades
     int num_actividades;
 } Lista_Actividades;
+
+typedef struct {
+    int anio;
+    int mes;
+    int dia;
+    char hora_min[6];
+    char hora_max[6];
+} S_Fecha_Seleccionada;
 
 
 
 //Prototipos de funciones:
 
 int listado_opciones();
+
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas);
 int F_selector_centros (Lista_Centros Centros);
 int F_selector_actividades (Lista_Actividades Actividades);
+S_Fecha_Seleccionada F_selector_horas();
+void F_Imprimir_Filtrado(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades,  int centro_filtrado, int actividad_filtrada, S_Fecha_Seleccionada fecha_filtrada);
+void F_Imprimir_Filtrado_Fichero(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades,  int centro_filtrado, int actividad_filtrada, S_Fecha_Seleccionada fecha_filtrada );
+
+
 void Opcion_1 (Registro vector_informacion[], int total_lineas);
 int Opcion_2_1();
 int Opcion_2_2();
@@ -101,6 +115,7 @@ while(fscanf(ARCHIVO, "%d %d %d %s %s %s %s %s %s %d %d %d %s", &vector_informac
     i++;
 }
 int total_lineas = i;
+fclose(ARCHIVO);
 // COdigo para printear una linea del archivo: NO BORRAR. printf("%d %d %d %s %s %s %s %s %s %d %d %d %s" , vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
 
 int opcion_listado;
@@ -167,10 +182,12 @@ switch (opcion_listado){
 }while(opcion_listado != 4);
 return 0;
 }
+
 //FUNCIONES (EN ORDEN DE APARICION:)
 
 
 int listado_opciones(){
+    printf("\n\n\n");
     printf("BIENVENIDO AL CENTRO DE GESTION DE DATOS DEPORTIVOS DE MADRID\n");
     printf("---------------------------------------------------\n");
     printf("Presione cualquier tecla para ingresar:");
@@ -427,7 +444,7 @@ void Horas_pico_actividad(Registro v[], int n) {
     }
 }
 
-Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los 63 centros diferentes en una estructura que se devolvera.
+Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas) //Subfuncion. Filtrara todos los centros y guardara los  centros diferentes (SON 66) en una estructura que se devolvera.
 {    
     Lista_Centros resultado;
     int i;
@@ -488,6 +505,7 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
 
     printf("Seleccione el centro de interes:\n");
     int i = 0;
+    int pag_max = (Centros.num_centros+8)/9;
     int pag = 1;
     int I = 0;
     char opcion;
@@ -495,20 +513,24 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
     int numero_seleccionado;
     int centro_seleccionado;
 
-    while(pag>=1&&pag<=7&&bandera ==0) //El maximo de paginas son 7, pues hay 63 centros.Esta hardcodeado  por simplicidad.
+    while(pag>=1&&pag<=pag_max&&bandera ==0)
     {
+        printf("\nPagina %d/%d\n\n" ,pag ,pag_max);
         for (i = 0; i<=8; i++)
         { 
             I = i+9*(pag-1); //El maximo de I son 62, el numero de elementos de ese vector. Esta hardcodeado  por simplicidad.
-
-			printf("\n%d: \t %s" ,i+1 ,Centros.centros[I].centro);
+            if (I<=Centros.num_centros-1) //Nos aseguramos de no entrar en un centro no existente
+            {
+			    printf("\n%d: \t %s" ,i+1 ,Centros.centros[I].centro);
+            }
         }
-    if (pag < 7)
+    if (pag == pag_max)
+        printf("\n0: \t Todos los centros\n"); 
+    if (pag < pag_max)
         printf("\n\n S: \t Pagina siguiente");
     if (pag > 1)
         printf("\n A: \t Pagina anterior");
-    if (pag == 7)
-        printf("\n 0: \t Todos los centros");
+
 
         printf("\nSeleccione un centro:\t");
             
@@ -519,7 +541,7 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
         {
             case 's':
             case 'S':
-            if (pag!= 7)
+            if (pag!= pag_max)
                 {
                     pag++;
                 }
@@ -540,10 +562,19 @@ int F_selector_centros (Lista_Centros Centros) //Permite al usuario seleccionar 
             case '7':
             case '8':
             case '9':
+                
                 numero_seleccionado = opcion - '0';
                 centro_seleccionado = numero_seleccionado+9*(pag-1);
-                bandera = 1;
-                break;
+                if (centro_seleccionado>Centros.num_centros) 
+                {
+                    printf("Opcion no valida.");
+                    break;
+                }
+                else
+                {
+                    bandera = 1;
+                    break;
+                }
             case '0':
                 centro_seleccionado = -1;
                 bandera = 1;
@@ -558,8 +589,12 @@ return centro_seleccionado;
 void Opcion_1(Registro vector_informacion[], int total_lineas) //Funcion de la opcion 1 (Listado de actividades):
 {
     Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
-    int centro_seleccionado = F_selector_centros (Centros);
-    
+    int centro_filtrado = F_selector_centros (Centros);
+    S_Fecha_Seleccionada fecha_filtrada = F_selector_horas();
+    Lista_Actividades Actividades = Listado_de_actividades(vector_informacion, total_lineas);
+    int actividad_filtrada = F_selector_actividades(Actividades);
+    F_Imprimir_Filtrado(total_lineas, vector_informacion, Centros, Actividades, centro_filtrado, actividad_filtrada, fecha_filtrada);
+    F_Imprimir_Filtrado_Fichero(total_lineas, vector_informacion, Centros, Actividades, centro_filtrado, actividad_filtrada, fecha_filtrada);
 }
 
 int F_selector_actividades (Lista_Actividades Actividades) 
@@ -567,6 +602,7 @@ int F_selector_actividades (Lista_Actividades Actividades)
 
     printf("Seleccione la actividad de interes:\n");
     int i = 0;
+    int pag_max = (Actividades.num_actividades+8)/9; //Se redondea hacia arriba
     int pag = 1;
     int I = 0;
     char opcion;
@@ -574,20 +610,26 @@ int F_selector_actividades (Lista_Actividades Actividades)
     int numero_seleccionado;
     int actividad_seleccionada;
 
-    while(pag>=1&&pag<=21&&bandera ==0) //El maximo de paginas son 21, pues hay 189 actividades.Esta hardcodeado  por simplicidad.
+    while(pag>=1&&pag<=pag_max&&bandera == 0) //While para pasar de pagina
     {
-        for (i = 0; i<=8; i++)
-        { 
-            I = i+9*(pag-1); //El maximo de I son 188, el numero de elementos de ese vector. Esta hardcodeado  por simplicidad.
+        printf("\nPagina %d/%d\n\n" ,pag ,pag_max);
 
-			printf("\n%d: \t %s" ,i+1 ,Actividades.actividades[I].actividad);
+        for (i = 0; i<=8; i++) //For para cada elemento de la pagina
+        { 
+            I = i+9*(pag-1);
+            if (I<=Actividades.num_actividades-1) //Nos aseguramos de no entrar en una actividad no existente
+            {
+                printf("\n%d: \t %s" ,i+1 ,Actividades.actividades[I].actividad);
+            }
+
         }
-    if (pag < 21)
-        printf("\n\n S: \t Pagina siguiente");
-    if (pag > 1)
-        printf("\n A: \t Pagina anterior");
-    if (pag == 21)
-        printf("\n 0: \t Todas las actividades");
+        if (pag == pag_max)
+            printf("\n0: \t Todas las actividades\n");
+        if (pag < pag_max)
+            printf("\n\n S: \t Pagina siguiente");
+        if (pag > 1)
+            printf("\n A: \t Pagina anterior");
+
 
         printf("\nSeleccione una actividad:\t");
             
@@ -599,7 +641,7 @@ int F_selector_actividades (Lista_Actividades Actividades)
         {
             case 's':
             case 'S':
-            if (pag!= 21)
+            if (pag!= pag_max)
                 {
                     pag++;
                 }
@@ -622,8 +664,16 @@ int F_selector_actividades (Lista_Actividades Actividades)
             case '9':
                 numero_seleccionado = opcion - '0';
                 actividad_seleccionada = numero_seleccionado+9*(pag-1);
-                bandera = 1;
-                break;
+                if (actividad_seleccionada>Actividades.num_actividades)
+                {
+                    printf("Opcion no valida.");
+                    break;
+                }
+                else
+                {
+                    bandera = 1;
+                    break;
+                }
             case '0':
                 actividad_seleccionada = -1;
                 bandera = 1;
@@ -634,4 +684,312 @@ int F_selector_actividades (Lista_Actividades Actividades)
         }
     }
 return actividad_seleccionada;
+}
+
+S_Fecha_Seleccionada F_selector_horas()
+{
+    char opcion;
+    S_Fecha_Seleccionada resultado;
+
+    printf("Quiere especificar una fecha para el filtro? (Y/N):\t");
+    scanf(" %c" ,&opcion);
+
+    switch (opcion) 
+    {
+        case 'y':
+        case 'Y':
+            printf("\nIntroduzca el annio de interes:\t");
+            scanf("%d" ,&resultado.anio);
+            printf("\nIntroduzca el mes  de interes: \n(Eje: 8 para agosto)\t");
+            scanf("%d" ,&resultado.mes); 
+            printf("\nIntroduzca el dia  de interes: \t");
+            scanf("%d" ,&resultado.dia); 
+            printf("\nIntroduzca la hora minima sobre la que le gustaria buscar. \n Formato: HH:MM \t");
+            scanf("%s" ,resultado.hora_min);                        
+            printf("\nIntroduzca la hora maxima sobre la que le gustaria buscar. \n Formato: HH:MM \t");
+            scanf("%s" ,resultado.hora_max); 
+        break;
+
+        case 'n':
+        case 'N': 
+            resultado.anio = -1;
+            resultado.mes = -1;
+            resultado.dia = -1;
+        break;
+        
+        default:
+        break;
+    }
+return resultado;
+}
+
+void F_Imprimir_Filtrado(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades,  int centro_filtrado, int actividad_filtrada, S_Fecha_Seleccionada fecha_filtrada )
+{
+    int i;
+    char pedir_tecla; //No se hace nada con esta variable.
+    printf("Pulse cualquier tecla para imprimir todas las actividades con los filtros seleccionados.\t");
+    scanf(" %c" ,&pedir_tecla); 
+
+    printf("\n");
+    printf("anio || mes || dia || dia_semana || hora_inicio || hora_fin || actividad_base || modalidad || centro || plazas || ocupadas || libres\n");
+    for (i=0; i<=total_lineas-1; i++)
+    {
+        if (centro_filtrado==-1)
+        {
+            if (actividad_filtrada==-1)
+            {
+                if(fecha_filtrada.anio==-1)
+                {
+                    //Se printean todos:
+                    printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                }
+                else
+                {
+                    if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                    {
+                        if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                        //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                        printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                    }
+                }
+            }
+            else
+            {
+                if(fecha_filtrada.anio==-1)
+                {
+                    //Se printean todos los de esa actividad:
+                    if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                    {
+                        printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                    }
+                }
+                else
+                {
+                    //Comprobacion de actividad:
+                     if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                    {
+                        //Comprobacion de fecha:
+                        if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                        {
+                            if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                            //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                            {                                
+                                printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        else
+        {
+            if (actividad_filtrada==-1)
+            {
+                if(fecha_filtrada.anio==-1)
+                {
+                    //Comprobacion de centro:
+                    if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                    {
+                        //Se printean todos los de ese centro:
+                        printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                    }
+                }
+                else
+                {
+                    //Comprobacion de centro:
+                    if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                    {
+                        //Comrpobacion de fecha:
+                        if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                        {
+                            if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                            //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                            {                                
+                                printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(fecha_filtrada.anio==-1)
+                {
+                    //Comprobacion de centro:
+                    if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                    {
+                        //Comprobacion de actividad:
+                        if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                        {
+                            printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                        }
+                    }                
+                }
+                else
+                {
+                    //Comprobacion de centro:
+                    if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                    {
+                        //Comprobacion de actividad:
+                        if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                        {
+                            //Comrpobacion de fecha:
+                            if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                            {
+                                if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                                //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                                {                                
+                                    printf("%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                                }                
+                            }
+                        }
+                    }
+                }
+            }            
+        }
+    }
+}
+
+void F_Imprimir_Filtrado_Fichero(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades,  int centro_filtrado, int actividad_filtrada, S_Fecha_Seleccionada fecha_filtrada )
+{
+    char opcion;
+    int i;
+    FILE *ARCHIVO_ESCRITURA_FILTRADO;
+    printf("Desea guardar el resultado en un nuevo fichero? (Y/N):\t");
+    scanf(" %c" ,&opcion);
+
+    switch (opcion)
+    {
+        case 'n':
+        case 'N':
+        default:
+            break;
+
+        case 'y': 
+        case 'Y':
+            printf("Creando fichero...\n");
+            //Codigo completamente copiado y ligeramente modificado de la funcion anterior:
+            ARCHIVO_ESCRITURA_FILTRADO = fopen("deportes_ayuntamiento_filtros.txt" , "w"); 
+            fprintf(ARCHIVO_ESCRITURA_FILTRADO, "anio mes dia dia_semana hora_inicio hora_fin actividad_base modalidad centro plazas ocupadas libres\n");
+            for (i=0; i<=total_lineas-1; i++)
+            {
+                if (centro_filtrado==-1)
+                {
+                    if (actividad_filtrada==-1)
+                    {
+                        if(fecha_filtrada.anio==-1)
+                        {
+                            //Se printean todos:
+                              fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                        }
+                        else
+                        {
+                            if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                            {
+                                if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                                //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                                fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(fecha_filtrada.anio==-1)
+                        {
+                            //Se printean todos los de esa actividad:
+                            if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                            {
+                                fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                            }
+                        }
+                        else
+                        {
+                            //Comprobacion de actividad:
+                            if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                            {
+                                //Comprobacion de fecha:
+                                if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                                {
+                                    if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                                    //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                                    {                                
+                                        fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (actividad_filtrada==-1)
+                    {
+                        if(fecha_filtrada.anio==-1)
+                        {
+                            //Comprobacion de centro:
+                            if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                            {
+                                //Se printean todos los de ese centro:
+                                fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                            }
+                        }
+                        else
+                        {
+                            //Comprobacion de centro:
+                            if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                            {
+                                //Comrpobacion de fecha:
+                                if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                                {
+                                    if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                                    //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                                    {                                
+                                        fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(fecha_filtrada.anio==-1)
+                        {
+                            //Comprobacion de centro:
+                            if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                            {
+                                //Comprobacion de actividad:
+                                if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                                {
+                                    fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                                }
+                            }                
+                        }
+                        else
+                        {
+                            //Comprobacion de centro:
+                            if(stricmp(vector_informacion[i].actividad.centro, Centros.centros[centro_filtrado-1].centro)==0)
+                            {
+                                //Comprobacion de actividad:
+                                if(stricmp(vector_informacion[i].actividad.actividad_base, Actividades.actividades[actividad_filtrada-1].actividad)==0)
+                                {
+                                    //Comrpobacion de fecha:
+                                    if(vector_informacion[i].fecha.anio == fecha_filtrada.anio && vector_informacion[i].fecha.mes == fecha_filtrada.mes && vector_informacion[i].fecha.dia == fecha_filtrada.dia) //Si el annio, mes y dia coinciden, se comprobara la hora.
+                                    {
+                                        if(strcmp(fecha_filtrada.hora_min, vector_informacion[i].horario.hora_ini)<=0 && strcmp(fecha_filtrada.hora_max, vector_informacion[i].horario.hora_fin)>=0)
+                                        //Si la hora del filtro es menor que la hora a la que empieza ase evento y la hora del final del filtro es mayor a la que termina, se imprime, se printea.
+                                        {                                
+                                            fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n" ,vector_informacion[i].fecha.anio , vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base , vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
+                                        }                
+                                    }
+                                }
+                            }
+                        }
+                    }            
+                }
+            }
+        fclose(ARCHIVO_ESCRITURA_FILTRADO);
+        break;
+    }
 }
