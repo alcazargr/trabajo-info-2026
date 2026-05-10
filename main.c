@@ -322,39 +322,106 @@ float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int to
 
 
 //Actividad_con_mas_demanda
-void Actividad_con_mas_demanda(Registro v[], int n) {
+void Actividad_con_mas_demanda(Registro v[], int n)
+{
     Lista_Actividades LA = Listado_de_actividades(v, n);
 
-    float max_ocup = -1;
-    char act_max[50];
-	int i;
-    for ( i = 0; i < LA.num_actividades; i++) {
-        float ocup = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
-        if (ocup > max_ocup) {
-            max_ocup = ocup;
-            strcpy(act_max, LA.actividades[i].actividad);
+    float max_ocupacion_porcentual = -1;
+    char actividad_max_porcentual[50];
+
+    int max_ocupacion_absoluta = -1;
+    char actividad_max_absoluta[50];
+
+    int i, j;
+
+    for (i = 0; i < LA.num_actividades; i++)
+    {
+        float ocupacion_porcentual;
+        int ocupacion_absoluta = 0;
+
+        // Calculamos la demanda porcentual de la actividad actual.
+        ocupacion_porcentual = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
+
+        // Calculamos la demanda absoluta de la actividad actual.
+        for (j = 0; j < n; j++)
+        {
+            if (strcmp(v[j].actividad.actividad_base, LA.actividades[i].actividad) == 0)
+            {
+                ocupacion_absoluta += v[j].aforo.ocupadas;
+            }
+        }
+
+        // Comprobamos si esta actividad tiene la mayor demanda porcentual.
+        if (ocupacion_porcentual > max_ocupacion_porcentual)
+        {
+            max_ocupacion_porcentual = ocupacion_porcentual;
+            strcpy(actividad_max_porcentual, LA.actividades[i].actividad);
+        }
+
+        // Comprobamos si esta actividad tiene la mayor demanda absoluta.
+        if (ocupacion_absoluta > max_ocupacion_absoluta)
+        {
+            max_ocupacion_absoluta = ocupacion_absoluta;
+            strcpy(actividad_max_absoluta, LA.actividades[i].actividad);
         }
     }
 
-    printf("\nActividad con mayor demanda: %s (%.2f%%)\n", act_max, max_ocup);
+    printf("\nActividad con mayor demanda porcentual: %s (%.2f%%)\n",
+           actividad_max_porcentual, max_ocupacion_porcentual);
+
+    printf("Actividad con mayor demanda absoluta: %s (%d plazas ocupadas)\n",
+           actividad_max_absoluta, max_ocupacion_absoluta);
 }
-
 //Actividad_con_menos_demanda
-void Actividad_con_menos_demanda(Registro v[], int n) {
+void Actividad_con_menos_demanda(Registro v[], int n)
+{
     Lista_Actividades LA = Listado_de_actividades(v, n);
 
-    float min_ocup = 999999;
-    char act_min[50];
-	int i;
-    for ( i = 0; i < LA.num_actividades; i++) {
-        float ocup = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
-        if (ocup < min_ocup) {
-            min_ocup = ocup;
-            strcpy(act_min, LA.actividades[i].actividad);
+    float min_ocupacion_porcentual = 999999;
+    char actividad_min_porcentual[50];
+
+    int min_ocupacion_absoluta = 999999;
+    char actividad_min_absoluta[50];
+
+    int i, j;
+
+    for (i = 0; i < LA.num_actividades; i++)
+    {
+        float ocupacion_porcentual;
+        int ocupacion_absoluta = 0;
+
+        // Calculamos la demanda porcentual de la actividad actual.
+        ocupacion_porcentual = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
+
+        // Calculamos la demanda absoluta de la actividad actual.
+        for (j = 0; j < n; j++)
+        {
+            if (strcmp(v[j].actividad.actividad_base, LA.actividades[i].actividad) == 0)
+            {
+                ocupacion_absoluta += v[j].aforo.ocupadas;
+            }
+        }
+
+        // Comprobamos si esta actividad tiene la menor demanda porcentual.
+        if (ocupacion_porcentual < min_ocupacion_porcentual)
+        {
+            min_ocupacion_porcentual = ocupacion_porcentual;
+            strcpy(actividad_min_porcentual, LA.actividades[i].actividad);
+        }
+
+        // Comprobamos si esta actividad tiene la menor demanda absoluta.
+        if (ocupacion_absoluta < min_ocupacion_absoluta)
+        {
+            min_ocupacion_absoluta = ocupacion_absoluta;
+            strcpy(actividad_min_absoluta, LA.actividades[i].actividad);
         }
     }
 
-    printf("\nActividad con menor demanda: %s (%.2f%%)\n", act_min, min_ocup);
+    printf("\nActividad con menor demanda porcentual: %s (%.2f%%)\n",
+           actividad_min_porcentual, min_ocupacion_porcentual);
+
+    printf("Actividad con menor demanda absoluta: %s (%d plazas ocupadas)\n",
+           actividad_min_absoluta, min_ocupacion_absoluta);
 }
 
 //Centro_con_mayor_oferta
