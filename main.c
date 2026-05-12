@@ -314,9 +314,9 @@ int Opcion_2_2()
 {
     int opcion_estadisticas_2;
 
-    printf("\nSeleccione el tipo de filtro:\n");
-    printf("1. Filtrar por centro\n");
-    printf("2. Filtrar por actividad\n");
+    printf("\nOcupación media:\n");
+    printf("1. Por centro\n");
+    printf("2. Por actividad\n");
     printf("Seleccione una opcion: ");
 
     scanf("%d", &opcion_estadisticas_2);
