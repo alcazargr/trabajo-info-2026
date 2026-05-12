@@ -35,6 +35,7 @@ typedef struct { // Estructura principal del archivo, dividida en subestructuras
 
 typedef struct {
     char centro[50];
+    float ocupacion_media;
 } unidad_centro;
 
 typedef struct {
@@ -59,13 +60,13 @@ typedef struct {
     char hora_max[6];
 } S_Fecha_Seleccionada;
 
-
 // Prototipos de funciones
 
 int listado_opciones();
 
 Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
 Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas);
+
 
 int F_selector_centros(Lista_Centros Centros);
 int F_selector_actividades(Lista_Actividades Actividades);
@@ -105,6 +106,9 @@ void F_Imprimir_Filtrado_Fichero(
     S_Fecha_Seleccionada fecha_filtrada
 );
 
+
+// Estadisticas
+
 int Opcion_2_1();
 int Opcion_2_2();
 
@@ -115,8 +119,6 @@ float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total
 float Ocupacion_media_actividades(Registro vector_informacion[], int total_lineas);
 float Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas);
 float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[]);
-
-// Estadisticas
 
 void Horas_pico_actividad(Registro v[], int n);
 void Actividad_con_mas_demanda(Registro v[], int n);
@@ -314,7 +316,7 @@ int Opcion_2_2()
 {
     int opcion_estadisticas_2;
 
-    printf("\nOcupación media:\n");
+    printf("\nOcupacion media:\n");
     printf("1. Por centro\n");
     printf("2. Por actividad\n");
     printf("Seleccione una opcion: ");
@@ -349,6 +351,9 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
         if (repetido == 0 && resultado.num_centros < MAX_CENTROS)
         {
             strcpy(resultado.centros[resultado.num_centros].centro, vector_informacion[i].actividad.centro);
+            
+            resultado.centros[resultado.num_centros].ocupacion_media = Ocupacion_media_centro_especifico(vector_informacion, total_lineas, vector_informacion[i].actividad.centro);
+            
             resultado.num_centros++;
         }
     }
