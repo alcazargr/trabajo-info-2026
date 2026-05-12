@@ -194,6 +194,7 @@ int main()
                 switch (opcion_estadisticas_1)
                 {
                     case 1:
+                        do{
                         opcion_estadisticas_2 = Opcion_2_2();
 
                         if (opcion_estadisticas_2 == 1)
@@ -208,9 +209,9 @@ int main()
                         }
                         else
                         {
-                            printf("\nOpcion no valida.\n");
+                            printf("\nOpcion no valida. Intente de nuevo.\n");
                         }
-
+                        }while(opcion_estadisticas_2 != 1 && opcion_estadisticas_2 != 2);
                         break;
 
                     case 2:
