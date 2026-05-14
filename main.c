@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h> // Para usar atoi, que pasa un numero string a entero
 
-#define N 5001
+#define N 5100
 #define MAX_CENTROS 70
 #define MAX_ACTIVIDADES 200
 #define MAX_TIPOS 50
@@ -131,6 +131,10 @@ void F_Imprimir_Filtrado_Fichero(
     S_Fecha_Seleccionada fecha_filtrada
 );
 
+void Eliminar_Salto_Linea(char cadena[])
+{
+    cadena[strcspn(cadena, "\n")] = '\0';
+}
 
 // Estadisticas
 
@@ -150,7 +154,10 @@ void Actividad_con_mas_demanda(Registro v[], int n);
 void Actividad_con_menos_demanda(Registro v[], int n);
 void Centro_con_mayor_oferta(Registro v[], int n);
 void Eficiencia_centros(Registro v[], int n);
-
+//Modificar fichero
+void Guardar_Fichero(Registro v[], int n);
+void Modificar_Actividad(Registro v[], int n);
+void Anadir_Actividad(Registro v[], int *n);
 
 // Funcion main
 
@@ -202,6 +209,7 @@ int main()
     int opcion_listado;
     int opcion_estadisticas_1;
     int opcion_estadisticas_2;
+    int opcion_modificar;
     float resultado_opcion_centro;
     float resultado_opcion_actividad;
 
@@ -272,8 +280,32 @@ int main()
                 break;
 
             case 3:
-                printf("\nLa opcion de modificar fichero todavia no esta implementada.\n");
-                break;
+
+  				  printf("\nModificar fichero\n");
+				  printf("-----------------\n");
+    			  printf("1. Sobreescribir actividad\n");
+    			  printf("2. Anadir actividad\n");
+    			  printf("Seleccione una opcion: ");
+				  scanf("%d", &opcion_modificar);
+
+ 			      switch(opcion_modificar)
+   				  {
+     				   case 1:
+         			  		Modificar_Actividad(vector_informacion, total_lineas);
+            				Guardar_Fichero(vector_informacion,total_lineas);
+         					break;
+
+     				   case 2:
+           					 Anadir_Actividad(vector_informacion, &total_lineas);
+					         Guardar_Fichero(vector_informacion,total_lineas);
+            				 break;
+            				 
+        				default:
+          				  	printf("Opcion no valida.\n");
+         				  	break;
+  					}
+
+    				break;
 
             case 4:
                 printf("Hasta pronto!\n");
@@ -1516,4 +1548,156 @@ void Horas_pico_actividad(Registro v[], int n)
     {
         printf("\nNo hay datos para la actividad %s\n", actividad);
     }
+}
+
+void Guardar_Fichero(Registro v[], int n)
+{
+    FILE *f;
+    int i;
+    f = fopen("deportes_ayuntamiento.txt", "w");
+
+    if (f == NULL)
+    {
+        printf("Error al guardar el fichero.\n");
+        return;
+    }
+
+    fprintf(f,"anio mes dia dia_semana hora_inicio hora_fin actividad_base modalidad centro plazas ocupadas libres tipo_actividad\n");
+
+    for (i = 0; i < n; i++)
+    {
+        Imprimir_registro_fichero(f, v[i]);
+    }
+
+    fclose(f);
+    printf("\nFichero actualizado correctamente.\n");
+}
+
+
+void Anadir_Actividad(Registro v[], int *n)
+{
+    Registro nuevo;
+    if (*n >= N)
+    {
+        printf("No hay espacio para mas actividades.\n");
+        return;
+    }
+
+    printf("\nNueva actividad\n");
+    printf("----------------\n");
+
+    printf("Anio: ");
+    scanf("%d", &nuevo.fecha.anio);
+
+    printf("Mes: ");
+    scanf("%d", &nuevo.fecha.mes);
+
+    printf("Dia: ");
+    scanf("%d", &nuevo.fecha.dia);
+
+    getchar();
+
+    printf("Dia semana: ");
+    fgets(nuevo.fecha.dia_semana, 11, stdin);
+    Eliminar_Salto_Linea(nuevo.fecha.dia_semana);
+
+    printf("Hora inicio: ");
+    fgets(nuevo.horario.hora_ini, 6, stdin);
+    Eliminar_Salto_Linea(nuevo.horario.hora_ini);
+
+    printf("Hora fin: ");
+    fgets(nuevo.horario.hora_fin, 6, stdin);
+    Eliminar_Salto_Linea(nuevo.horario.hora_fin);
+
+    printf("Actividad: ");
+    fgets(nuevo.actividad.actividad_base, 50, stdin);
+    Eliminar_Salto_Linea(nuevo.actividad.actividad_base);
+
+    printf("Modalidad: ");
+    fgets(nuevo.actividad.modalidad, 50, stdin);
+    Eliminar_Salto_Linea(nuevo.actividad.modalidad);
+
+    printf("Centro: ");
+    fgets(nuevo.actividad.centro, 50, stdin);
+    Eliminar_Salto_Linea(nuevo.actividad.centro);
+
+    printf("Plazas: ");
+    scanf("%d", &nuevo.aforo.plazas);
+
+    printf("Ocupadas: ");
+    scanf("%d", &nuevo.aforo.ocupadas);
+
+    nuevo.aforo.libres = nuevo.aforo.plazas - nuevo.aforo.ocupadas;
+
+    getchar();
+
+    printf("Tipo uso: ");
+    fgets(nuevo.actividad.tipo_uso, 50, stdin);
+    Eliminar_Salto_Linea(nuevo.actividad.tipo_uso);
+
+    v[*n] = nuevo;
+
+    (*n)++;
+
+    printf("\nActividad anadida correctamente.\n");
+}
+
+
+void Modificar_Actividad(Registro v[], int n)
+{
+    int i;
+    int opcion;
+
+    printf("\nListado de actividades\n");
+    printf("----------------------\n");
+
+    for (i = 0; i < n; i++)
+    {
+        printf(
+            "%d -> %s | %s | %s\n",
+            i,
+            v[i].actividad.actividad_base,
+            v[i].actividad.centro,
+            v[i].horario.hora_ini
+        );
+    }
+
+    printf("\nSeleccione el indice de la actividad: ");
+    scanf("%d", &opcion);
+
+    if (opcion < 0 || opcion >= n)
+    {
+        printf("Indice no valido.\n");
+        return;
+    }
+
+    getchar();
+
+    printf("\nNuevo nombre actividad: ");
+    fgets(v[opcion].actividad.actividad_base, 50, stdin);
+    Eliminar_Salto_Linea(v[opcion].actividad.actividad_base);
+
+    printf("Nueva modalidad: ");
+    fgets(v[opcion].actividad.modalidad, 50, stdin);
+    Eliminar_Salto_Linea(v[opcion].actividad.modalidad);
+
+    printf("Nuevo centro: ");
+    fgets(v[opcion].actividad.centro, 50, stdin);
+    Eliminar_Salto_Linea(v[opcion].actividad.centro);
+
+    printf("Nuevas plazas: ");
+    scanf("%d", &v[opcion].aforo.plazas);
+
+    printf("Nuevas ocupadas: ");
+    scanf("%d", &v[opcion].aforo.ocupadas);
+
+    v[opcion].aforo.libres = v[opcion].aforo.plazas - v[opcion].aforo.ocupadas;
+
+    getchar();
+
+    printf("Nuevo tipo uso: ");
+    fgets(v[opcion].actividad.tipo_uso, 50, stdin);
+    Eliminar_Salto_Linea(v[opcion].actividad.tipo_uso);
+
+    printf("\nActividad modificada correctamente.\n");
 }
