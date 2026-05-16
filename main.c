@@ -345,7 +345,7 @@ int F_selector_centros(Lista_Centros Centros)
 {
     int i;
     int indice_real;
-    int pag_max = (Centros.num_centros + 8) / 9;
+    int pag_max = (Centros.num_centros + 7) / 8;
     int pag = 1;
     char opcion;
     int bandera = 0;
@@ -358,15 +358,16 @@ int F_selector_centros(Lista_Centros Centros)
     {
         printf("\nPagina %d/%d\n", pag, pag_max);
 
-        printf("0: Todos los centros\n");
+        printf("0: Volver al menu principal\n");
+        printf("1: Todos los centros\n");
 
-        for (i = 0; i < 9; i++)
+        for (i = 0; i < 8; i++)
         {
-            indice_real = i + 9 * (pag - 1);
+            indice_real = i + 8 * (pag - 1);
 
             if (indice_real < Centros.num_centros)
             {
-                printf("%d: %s\n", i + 1, Centros.centros[indice_real].centro);
+                printf("%d: %s\n", i + 2, Centros.centros[indice_real].centro);
             }
         }
 
@@ -410,11 +411,15 @@ int F_selector_centros(Lista_Centros Centros)
                 break;
 
             case '0':
-                centro_seleccionado = -1;
+                centro_seleccionado = -2;
                 bandera = 1;
                 break;
 
             case '1':
+                centro_seleccionado = -1;
+                bandera = 1;
+                break;
+
             case '2':
             case '3':
             case '4':
@@ -424,7 +429,7 @@ int F_selector_centros(Lista_Centros Centros)
             case '8':
             case '9':
                 numero_seleccionado = opcion - '0';
-                centro_seleccionado = (numero_seleccionado - 1) + 9 * (pag - 1);
+                centro_seleccionado = (numero_seleccionado - 2) + 8 * (pag - 1);
 
                 if (centro_seleccionado >= Centros.num_centros)
                 {
@@ -450,7 +455,7 @@ int F_selector_actividades(Lista_Actividades Actividades)
 {
     int i;
     int indice_real;
-    int pag_max = (Actividades.num_actividades + 8) / 9;
+    int pag_max = (Actividades.num_actividades + 7) / 8;
     int pag = 1;
     char opcion;
     int bandera = 0;
@@ -463,15 +468,16 @@ int F_selector_actividades(Lista_Actividades Actividades)
     {
         printf("\nPagina %d/%d\n", pag, pag_max);
 
-        printf("0: Todas las actividades\n");
+        printf("0: Volver al menu principal\n");
+        printf("1: Todas las actividades\n");
 
-        for (i = 0; i < 9; i++)
+        for (i = 0; i < 8; i++)
         {
-            indice_real = i + 9 * (pag - 1);
+            indice_real = i + 8 * (pag - 1);
 
             if (indice_real < Actividades.num_actividades)
             {
-                printf("%d: %s\n", i + 1, Actividades.actividades[indice_real].actividad);
+                printf("%d: %s\n", i + 2, Actividades.actividades[indice_real].actividad);
             }
         }
 
@@ -515,11 +521,15 @@ int F_selector_actividades(Lista_Actividades Actividades)
                 break;
 
             case '0':
-                actividad_seleccionada = -1;
+                actividad_seleccionada = -2;
                 bandera = 1;
                 break;
 
             case '1':
+                actividad_seleccionada = -1;
+                bandera = 1;
+                break;
+
             case '2':
             case '3':
             case '4':
@@ -529,7 +539,7 @@ int F_selector_actividades(Lista_Actividades Actividades)
             case '8':
             case '9':
                 numero_seleccionado = opcion - '0';
-                actividad_seleccionada = (numero_seleccionado - 1) + 9 * (pag - 1);
+                actividad_seleccionada = (numero_seleccionado - 2) + 8 * (pag - 1);
 
                 if (actividad_seleccionada >= Actividades.num_actividades)
                 {
@@ -554,7 +564,7 @@ int F_selector_tipos(Lista_Tipos Tipos)
 {
     int i;
     int indice_real;
-    int pag_max = (Tipos.num_tipos + 8) / 9;
+    int pag_max = (Tipos.num_tipos + 7) / 8;
     int pag = 1;
     char opcion;
     int bandera = 0;
@@ -566,15 +576,17 @@ int F_selector_tipos(Lista_Tipos Tipos)
     while (pag >= 1 && pag <= pag_max && bandera == 0)
     {
         printf("\nPagina %d/%d\n", pag, pag_max);
-        printf("0: Todos los tipos\n");
 
-        for (i = 0; i < 9; i++)
+        printf("0: Volver al menu principal\n");
+        printf("1: Todos los tipos\n");
+
+        for (i = 0; i < 8; i++)
         {
-            indice_real = i + 9 * (pag - 1);
+            indice_real = i + 8 * (pag - 1);
 
             if (indice_real < Tipos.num_tipos)
             {
-                printf("%d: %s\n", i + 1, Tipos.tipos[indice_real].tipo);
+                printf("%d: %s\n", i + 2, Tipos.tipos[indice_real].tipo);
             }
         }
 
@@ -618,11 +630,15 @@ int F_selector_tipos(Lista_Tipos Tipos)
                 break;
 
             case '0':
-                tipo_seleccionado = -1;
+                tipo_seleccionado = -2;
                 bandera = 1;
                 break;
 
             case '1':
+                tipo_seleccionado = -1;
+                bandera = 1;
+                break;
+
             case '2':
             case '3':
             case '4':
@@ -632,7 +648,7 @@ int F_selector_tipos(Lista_Tipos Tipos)
             case '8':
             case '9':
                 numero_seleccionado = opcion - '0';
-                tipo_seleccionado = (numero_seleccionado - 1) + 9 * (pag - 1);
+                tipo_seleccionado = (numero_seleccionado - 2) + 8 * (pag - 1);
 
                 if (tipo_seleccionado >= Tipos.num_tipos)
                 {
@@ -759,17 +775,44 @@ int F_Cumple_filtros(Registro r, Lista_Centros Centros, Lista_Actividades Activi
 //Funciones principales de cada opcion:
 void F_Opcion_1(Registro vector_informacion[], int total_lineas)
 {
-    Lista_Centros Centros = F_Listado_de_centros(vector_informacion, total_lineas);
-    int centro_filtrado = F_selector_centros(Centros);
+    Lista_Centros Centros;
+    Lista_Actividades Actividades;
+    Lista_Tipos Tipos;
 
+    int centro_filtrado;
+    int actividad_filtrada;
+    int tipo_filtrado;
 
-    Lista_Actividades Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
-    int actividad_filtrada = F_selector_actividades(Actividades);
+    S_Fecha_Seleccionada fecha_filtrada;
 
-    Lista_Tipos Tipos = F_Listado_de_tipos(vector_informacion, total_lineas);
-    int tipo_filtrado = F_selector_tipos(Tipos);
+    Centros = F_Listado_de_centros(vector_informacion, total_lineas);
+    centro_filtrado = F_selector_centros(Centros);
 
-    S_Fecha_Seleccionada fecha_filtrada = F_selector_horas();
+    if (centro_filtrado == -2)
+    {
+        printf("\nVolviendo al menu principal...\n");
+        return;
+    }
+
+    Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
+    actividad_filtrada = F_selector_actividades(Actividades);
+
+    if (actividad_filtrada == -2)
+    {
+        printf("\nVolviendo al menu principal...\n");
+        return;
+    }
+
+    Tipos = F_Listado_de_tipos(vector_informacion, total_lineas);
+    tipo_filtrado = F_selector_tipos(Tipos);
+
+    if (tipo_filtrado == -2)
+    {
+        printf("\nVolviendo al menu principal...\n");
+        return;
+    }
+
+    fecha_filtrada = F_selector_horas();
 
     F_Imprimir_Filtrado(total_lineas, vector_informacion, Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada);
     F_Imprimir_Filtrado_Fichero(total_lineas, vector_informacion, Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada);
@@ -777,50 +820,81 @@ void F_Opcion_1(Registro vector_informacion[], int total_lineas)
 
 void F_Opcion_2(Registro vector_informacion[], int total_lineas)
 {
-    int opcion_estadisticas = F_Opcion_2_1();
+    int opcion_estadisticas;
     int opcion_estadisticas_media;
     float resultado_opcion_centro;
     float resultado_opcion_actividad;
 
-    switch (opcion_estadisticas)
+    do
+    {
+        opcion_estadisticas = F_Opcion_2_1();
+
+        switch (opcion_estadisticas)
         {
             case 1:
-                do{
+                do
+                {
                     opcion_estadisticas_media = F_Opcion_2_2();
-                    if (opcion_estadisticas_media == 1)
+
+                    switch (opcion_estadisticas_media)
                     {
-                        resultado_opcion_centro = F_Ocupacion_media_centros(vector_informacion, total_lineas);
-                        printf("\nLa ocupacion media del centro es de: %.2f %%\n", resultado_opcion_centro);
+                        case 1:
+                            resultado_opcion_centro = F_Ocupacion_media_centros(vector_informacion, total_lineas);
+
+                            if (resultado_opcion_centro >= 0)
+                            {
+                                printf("\nLa ocupacion media del centro es de: %.2f %%\n", resultado_opcion_centro);
+                            }
+                            break;
+
+                        case 2:
+                            resultado_opcion_actividad = F_Ocupacion_media_actividades(vector_informacion, total_lineas);
+
+                            if (resultado_opcion_actividad >= 0)
+                            {
+                                printf("\nLa ocupacion media de la actividad es de: %.2f %% \n", resultado_opcion_actividad);
+                            }
+                            break;
+
+                        case 3:
+                            printf("\nVolviendo al menu principal...\n");
+                            break;
+
+                        default:
+                            printf("\nOpcion no valida. Intente de nuevo.\n");
+                            break;
                     }
-                    else if (opcion_estadisticas_media == 2)
-                    {
-                        resultado_opcion_actividad = F_Ocupacion_media_actividades(vector_informacion, total_lineas);
-                        printf("\nLa ocupacion media de la actividad es de: %.2f %% \n", resultado_opcion_actividad);
-                    }
-                    else
-                    {
-                        printf("\nOpcion no valida. Intente de nuevo.\n");
-                    }
-                        }while(opcion_estadisticas_media != 1 && opcion_estadisticas_media != 2);
-                        break;
+
+                } while (opcion_estadisticas_media < 1 || opcion_estadisticas_media > 3);
+                break;
 
             case 2:
                 F_Eficiencia_centros(vector_informacion, total_lineas);
                 break;
 
+            case 3:
+                printf("\nVolviendo al menu principal...\n");
+                break;
+
             default:
-                printf("\nOpcion no valida.\n");
+                printf("\nOpcion no valida. Intente de nuevo.\n");
                 break;
         }
+
+    } while (opcion_estadisticas < 1 || opcion_estadisticas > 3);
 }
+
 
 void F_Opcion_3(Registro vector_informacion[], int total_lineas)
 {
+    int opcion_analisis;
 
-    int opcion_analisis = F_Opcion_3_1();
-    
-    switch (opcion_analisis)
-        {      
+    do
+    {
+        opcion_analisis = F_Opcion_3_1();
+
+        switch (opcion_analisis)
+        {
             case 1:
                 F_Horas_pico_actividad(vector_informacion, total_lineas);
                 break;
@@ -829,55 +903,82 @@ void F_Opcion_3(Registro vector_informacion[], int total_lineas)
                 F_Actividad_con_mas_demanda(vector_informacion, total_lineas);
                 break;
 
-             case 3:
+            case 3:
                 F_Actividad_con_menos_demanda(vector_informacion, total_lineas);
                 break;
-                       
+
             case 4:
                 F_Centro_con_mayor_oferta(vector_informacion, total_lineas);
                 break;
-            case 5: 
+
+            case 5:
                 F_Grafico_Centros(vector_informacion, total_lineas);
                 break;
-            case 6: 
+
+            case 6:
                 F_Grafico_Actividades(vector_informacion, total_lineas);
                 break;
 
+            case 7:
+                printf("\nVolviendo al menu principal...\n");
+                break;
+
             default:
-                printf("\nOpcion no valida.\n");
+                printf("\nOpcion no valida. Intente de nuevo.\n");
                 break;
         }
+
+    } while (opcion_analisis < 1 || opcion_analisis > 7);
 }
+
 
 void F_Opcion_4(Registro vector_informacion[], int total_lineas)
 {
     int opcion_modificar;
+    int entrada_correcta;
 
-    printf("\nModificar fichero:\n");
-	printf("-----------------\n\n");
-    printf("1. Sobreescribir una actividad existente.\n");
-    printf("2. Anadir una actividad nueva.\n");
-    printf("Seleccione una opcion: ");
-    scanf("%d", &opcion_modificar);
+    do
+    {
+        printf("\nModificar fichero:\n");
+        printf("-----------------\n\n");
+        printf("1. Sobreescribir una actividad existente.\n");
+        printf("2. Anadir una actividad nueva.\n");
+        printf("3. Volver al menu principal.\n");
+        printf("Seleccione una opcion: ");
 
- 	switch(opcion_modificar)
-   	{
-     	case 1:
-         	F_Modificar_Actividad(vector_informacion, total_lineas);
-            F_Guardar_Fichero(vector_informacion,total_lineas);
-        break;
+        entrada_correcta = scanf("%d", &opcion_modificar);
 
-     	case 2:
-            F_Anadir_Actividad(vector_informacion, &total_lineas);
-            F_Guardar_Fichero(vector_informacion,total_lineas);
-        break;
-            				 
-    	default:          		
-            printf("Opcion no valida.\n");
-        break;
-  	}
+        if (entrada_correcta != 1)
+        {
+            while (getchar() != '\n');
+            opcion_modificar = -1;
+        }
+
+        switch (opcion_modificar)
+        {
+            case 1:
+                F_Modificar_Actividad(vector_informacion, total_lineas);
+                F_Guardar_Fichero(vector_informacion, total_lineas);
+                break;
+
+            case 2:
+                F_Anadir_Actividad(vector_informacion, &total_lineas);
+                F_Guardar_Fichero(vector_informacion, total_lineas);
+                break;
+
+            case 3:
+                printf("\nVolviendo al menu principal...\n");
+                break;
+
+            default:
+                printf("\nOpcion no valida. Intente de nuevo.\n");
+                break;
+        }
+
+    } while (opcion_modificar < 1 || opcion_modificar > 3);
 }
 
+//Subfunciones Opcion 1.
 //Subfunciones Opcion 1.
 void F_Imprimir_Filtrado(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades, Lista_Tipos Tipos, int centro_filtrado, int actividad_filtrada, int tipo_filtrado, S_Fecha_Seleccionada fecha_filtrada)
 {
@@ -958,33 +1059,44 @@ void F_Imprimir_Filtrado_Fichero(int total_lineas, Registro vector_informacion[]
 int F_Opcion_2_1()
 {
     int opcion_estadisticas_1;
+    int entrada_correcta;
 
     printf("\nEstadisticas:\n");
     printf("1. Ocupacion media\n");
-    printf("2. Eficiencia de un centro\n");
-
-    /* printf("2. Horas pico segun actividad\n");
-    printf("3. Actividad con mas demanda\n");
-    printf("4. Actividad con menos demanda\n");
-    printf("5. Centro con mayor oferta\n");
-    */
+    printf("2. Eficiencia de los centros\n");
+    printf("3. Volver al menu principal\n");
     printf("Seleccione una opcion: ");
 
-    scanf("%d", &opcion_estadisticas_1);
+    entrada_correcta = scanf("%d", &opcion_estadisticas_1);
+
+    if (entrada_correcta != 1)
+    {
+        while (getchar() != '\n');
+        opcion_estadisticas_1 = -1;
+    }
 
     return opcion_estadisticas_1;
 }
 
+
 int F_Opcion_2_2()
 {
     int opcion_estadisticas_2;
+    int entrada_correcta;
 
     printf("\nOcupacion media:\n");
     printf("1. Por centro\n");
     printf("2. Por actividad\n");
+    printf("3. Volver al menu principal\n");
     printf("Seleccione una opcion: ");
 
-    scanf("%d", &opcion_estadisticas_2);
+    entrada_correcta = scanf("%d", &opcion_estadisticas_2);
+
+    if (entrada_correcta != 1)
+    {
+        while (getchar() != '\n');
+        opcion_estadisticas_2 = -1;
+    }
 
     return opcion_estadisticas_2;
 }
@@ -994,17 +1106,19 @@ float F_Ocupacion_media_centros(Registro vector_informacion[], int total_lineas)
     Lista_Centros Centros = F_Listado_de_centros(vector_informacion, total_lineas);
     int centro_seleccionado = F_selector_centros(Centros);
 
+    if (centro_seleccionado == -2)
+    {
+        printf("\nVolviendo al menu principal...\n");
+        return -1;
+    }
+
     if (centro_seleccionado == -1)
     {
         return F_Ocupacion_media_todos_centros(vector_informacion, total_lineas);
     }
     else
     {
-        return F_Ocupacion_media_centro_especifico(
-            vector_informacion,
-            total_lineas,
-            Centros.centros[centro_seleccionado].centro
-        );
+        return F_Ocupacion_media_centro_especifico(vector_informacion, total_lineas, Centros.centros[centro_seleccionado].centro);
     }
 }
 
@@ -1055,6 +1169,12 @@ float F_Ocupacion_media_actividades(Registro vector_informacion[], int total_lin
 {
     Lista_Actividades Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
     int actividad_seleccionada = F_selector_actividades(Actividades);
+
+    if (actividad_seleccionada == -2)
+    {
+        printf("\nVolviendo al menu principal...\n");
+        return -1;
+    }
 
     if (actividad_seleccionada == -1)
     {
@@ -1112,32 +1232,148 @@ float F_Ocupacion_media_actividad_especifica(Registro vector_informacion[], int 
 void F_Eficiencia_centros(Registro v[], int n)
 {
     Lista_Centros LC = F_Listado_de_centros(v, n);
-    int i;
+    Oferta_Centro ofertas[MAX_CENTROS];
 
-    printf("\nEficiencia de los centros:\n");
+    int i, j, k;
+    int repetida;
+    int max_actividades = 0;
+    int max_plazas = 0;
 
+    float ocupacion;
+    float variedad;
+    float volumen_oferta;
+    float eficiencia;
+
+    /*
+        La eficiencia de cada centro se calcula como un valor compuesto.
+        Asi no se repite exactamente el mismo calculo que la ocupacion media.
+
+        Factores usados:
+        - Ocupacion: porcentaje de plazas ocupadas respecto a las plazas totales del centro.
+        - Variedad: actividades distintas del centro comparadas con el centro con mas variedad.
+        - Volumen de oferta: plazas totales del centro comparadas con el centro que mas plazas ofrece.
+
+        Formula final:
+        eficiencia = ocupacion * 0.60 + variedad * 0.25 + volumen_oferta * 0.15
+    */
+
+    // Primero se recopilan los datos necesarios de cada centro.
     for (i = 0; i < LC.num_centros; i++)
     {
-        float ocupacion = F_Ocupacion_media_centro_especifico(v, n, LC.centros[i].centro);
-        printf("- %s: %.2f%%\n", LC.centros[i].centro, ocupacion);
+        char actividades_distintas[MAX_ACTIVIDADES][50];
+
+        strcpy(ofertas[i].centro, LC.centros[i].centro);
+        ofertas[i].actividades_distintas = 0;
+        ofertas[i].sesiones_totales = 0;
+        ofertas[i].plazas_totales = 0;
+
+        for (j = 0; j < n; j++)
+        {
+            if (strcmp(v[j].actividad.centro, LC.centros[i].centro) == 0)
+            {
+                ofertas[i].sesiones_totales++;
+                ofertas[i].plazas_totales += v[j].aforo.plazas;
+
+                // Se comprueba si la actividad ya ha sido contada en este centro.
+                repetida = 0;
+
+                for (k = 0; k < ofertas[i].actividades_distintas; k++)
+                {
+                    if (strcmp(actividades_distintas[k], v[j].actividad.actividad_base) == 0)
+                    {
+                        repetida = 1;
+                        break;
+                    }
+                }
+
+                // Si la actividad no estaba repetida, se guarda como nueva actividad distinta.
+                if (repetida == 0 && ofertas[i].actividades_distintas < MAX_ACTIVIDADES)
+                {
+                    strcpy(actividades_distintas[ofertas[i].actividades_distintas], v[j].actividad.actividad_base);
+                    ofertas[i].actividades_distintas++;
+                }
+            }
+        }
+
+        // Se guardan los maximos para poder normalizar los datos en porcentaje.
+        if (ofertas[i].actividades_distintas > max_actividades)
+        {
+            max_actividades = ofertas[i].actividades_distintas;
+        }
+
+        if (ofertas[i].plazas_totales > max_plazas)
+        {
+            max_plazas = ofertas[i].plazas_totales;
+        }
     }
+
+    printf("\nEficiencia de los centros:\n");
+    printf("--------------------------\n\n");
+
+    // Finalmente se calcula e imprime la eficiencia de cada centro.
+    for (i = 0; i < LC.num_centros; i++)
+    {
+        ocupacion = F_Ocupacion_media_centro_especifico(v, n, ofertas[i].centro);
+
+        if (max_actividades == 0)
+        {
+            variedad = 0;
+        }
+        else
+        {
+            variedad = ((float)ofertas[i].actividades_distintas / max_actividades) * 100;
+        }
+
+        if (max_plazas == 0)
+        {
+            volumen_oferta = 0;
+        }
+        else
+        {
+            volumen_oferta = ((float)ofertas[i].plazas_totales / max_plazas) * 100;
+        }
+
+        eficiencia = ocupacion * 0.60 + variedad * 0.25 + volumen_oferta * 0.15;
+
+        printf("Centro: %s\n", ofertas[i].centro);
+        printf("  Ocupacion: %.2f%%\n", ocupacion);
+        printf("  Variedad de actividades: %.2f%% (%d actividades distintas)\n", variedad, ofertas[i].actividades_distintas);
+        printf("  Volumen de oferta: %.2f%% (%d plazas ofertadas)\n", volumen_oferta, ofertas[i].plazas_totales);
+        printf("  Eficiencia final: %.2f%%\n\n", eficiencia);
+    }
+
+    printf("Formula utilizada:\n");
+    printf("------------------\n");
+    printf("Eficiencia = ocupacion * 0.60 + variedad * 0.25 + volumen de oferta * 0.15\n\n");
+    printf("Donde:\n");
+    printf("- Ocupacion: porcentaje de plazas ocupadas respecto a las plazas totales del centro.\n");
+    printf("- Variedad: actividades distintas del centro comparadas con el centro que mas actividades distintas tiene.\n");
+    printf("- Volumen de oferta: plazas totales del centro comparadas con el centro que mas plazas ofrece.\n\n");
 }
 
 //Subfunciones Opcion 3.
 int F_Opcion_3_1()
 {
     int opcion_analisis;
+    int entrada_correcta;
 
     printf("\nQue desea saber?\n");
     printf("1. Horas pico de una actividad.\n");
     printf("2. Actividad con mas demanda.\n");
     printf("3. Actividad con menos demanda.\n");
     printf("4. Centro con mayor oferta de actividades.\n");
-    printf("5. Descargar hoja de calculo con la ocupacion media de cada centro deportivo.");
-    printf("6. Descargar hoja de calculo con la ocupcion media de cada actividad.");
+    printf("5. Descargar hoja de calculo con la ocupacion media de cada centro deportivo.\n");
+    printf("6. Descargar hoja de calculo con la ocupacion media de cada actividad.\n");
+    printf("7. Volver al menu principal.\n");
     printf("Seleccione una opcion:\t");
 
-    scanf("%d", &opcion_analisis);
+    entrada_correcta = scanf("%d", &opcion_analisis);
+
+    if (entrada_correcta != 1)
+    {
+        while (getchar() != '\n');
+        opcion_analisis = -1;
+    }
 
     return opcion_analisis;
 }
@@ -1146,6 +1382,12 @@ void F_Horas_pico_actividad(Registro v[], int n)
 {
     Lista_Actividades LA = F_Listado_de_actividades(v, n);
     int act = F_selector_actividades(LA);
+
+    if (act == -2)
+    {
+        printf("\nVolviendo al menu principal...\n");
+        return;
+    }
 
     if (act == -1)
     {
@@ -1415,19 +1657,27 @@ void F_Centro_con_mayor_oferta(Registro v[], int n)
 void F_Grafico_Centros(Registro vector_informacion[], int total_lineas)
 {
     Lista_Centros Centros = F_Listado_de_centros(vector_informacion, total_lineas);
-    int i;
-    for (i=0; i<=Centros.num_centros; i++)
-    {
-        Centros.centros[i].ocupacion_media= F_Ocupacion_media_centro_especifico(vector_informacion, total_lineas, Centros.centros[i].centro);
-    }
-
     FILE* GRAFICA;
-    GRAFICA = fopen("Ocupacion_Media_Centros.csv" , "w");
+    int i;
 
-    for (i=0; i<=Centros.num_centros; i++)
+    GRAFICA = fopen("Ocupacion_Media_Centros.csv", "w");
+
+    if (GRAFICA == NULL)
     {
-        fprintf(GRAFICA, "%s;%.2f\n" ,Centros.centros[i].centro ,Centros.centros[i].ocupacion_media);
+        printf("ERROR: No se ha podido crear el fichero Ocupacion_Media_Centros.csv\n");
+        printf("Comprueba que el archivo no este abierto y que el programa tenga permisos para escribir en la carpeta.\n");
+        return;
     }
+
+    fprintf(GRAFICA, "Centro;Ocupacion_media\n");
+
+    for (i = 0; i < Centros.num_centros; i++)
+    {
+        Centros.centros[i].ocupacion_media = F_Ocupacion_media_centro_especifico(vector_informacion, total_lineas, Centros.centros[i].centro);
+
+        fprintf(GRAFICA, "%s;%.2f\n", Centros.centros[i].centro, Centros.centros[i].ocupacion_media);
+    }
+
     fclose(GRAFICA);
 
     printf("La hoja de calculo Ocupacion_Media_Centros.csv se ha descargado correctamente\n");
@@ -1437,19 +1687,27 @@ void F_Grafico_Centros(Registro vector_informacion[], int total_lineas)
 void F_Grafico_Actividades(Registro vector_informacion[], int total_lineas)
 {
     Lista_Actividades Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
-    int i;
-    for (i=0; i<=Actividades.num_actividades; i++)
-    {
-        Actividades.actividades[i].ocupacion_media = F_Ocupacion_media_centro_especifico(vector_informacion, total_lineas, Actividades.actividades[i].actividad);
-    }
-
     FILE* GRAFICA;
-    GRAFICA = fopen("Ocupacion_Media_Actividades.csv" , "w");
+    int i;
 
-    for (i=0; i<=Actividades.num_actividades; i++)
+    GRAFICA = fopen("Ocupacion_Media_Actividades.csv", "w");
+
+    if (GRAFICA == NULL)
     {
-        fprintf(GRAFICA, "%s;%.2f\n" ,Actividades.actividades[i].actividad ,Actividades.actividades[i].ocupacion_media);
+        printf("ERROR: No se ha podido crear el fichero Ocupacion_Media_Actividades.csv\n");
+        printf("Comprueba que el archivo no este abierto y que el programa tenga permisos para escribir en la carpeta.\n");
+        return;
     }
+
+    fprintf(GRAFICA, "Actividad;Ocupacion_media\n");
+
+    for (i = 0; i < Actividades.num_actividades; i++)
+    {
+        Actividades.actividades[i].ocupacion_media = F_Ocupacion_media_actividad_especifica(vector_informacion, total_lineas, Actividades.actividades[i].actividad);
+
+        fprintf(GRAFICA, "%s;%.2f\n", Actividades.actividades[i].actividad, Actividades.actividades[i].ocupacion_media);
+    }
+
     fclose(GRAFICA);
 
     printf("La hoja de calculo Ocupacion_Media_Actividades.csv se ha descargado correctamente\n");
@@ -1509,15 +1767,15 @@ void F_Anadir_Actividad(Registro v[], int *n)
     getchar();
 
     printf("Introduzca el dia de la semana de la actividad:\t ");
-    fgets(nuevo.fecha.dia_semana, 11, stdin);
+    fgets(nuevo.fecha.dia_semana, 10, stdin);
     F_Eliminar_Salto_Linea(nuevo.fecha.dia_semana);
 
     printf("Introduzca la hora de inicio de la actividad. (Formato: HH:MM):\t ");
-    fgets(  nuevo.horario.hora_ini, 10, stdin);
+    fgets(  nuevo.horario.hora_ini, 6, stdin);
     F_Eliminar_Salto_Linea(nuevo.horario.hora_ini);
 
     printf("Introduzca la hora de fin de la actividad. (Formato: HH:MM):\t ");
-    fgets(  nuevo.horario.hora_fin, 10, stdin);
+    fgets(  nuevo.horario.hora_fin, 6, stdin);
     F_Eliminar_Salto_Linea(nuevo.horario.hora_fin);
 
     printf("Introduzca la actividad:\t");
@@ -1605,7 +1863,4 @@ void F_Modificar_Actividad(Registro v[], int n)
 
     printf("\nActividad modificada correctamente.\n");
 }
-
-
-
 
