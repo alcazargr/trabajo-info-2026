@@ -46,6 +46,7 @@ typedef struct {
 
 typedef struct {
     char actividad[50];
+    float ocupacion_media;
 } unidad_actividad;
 
 typedef struct {
@@ -78,86 +79,69 @@ typedef struct {
 } Oferta_Centro;
 
 
-// Prototipos de funciones
+// Prototipos de funciones:
 
-int listado_opciones();
 
-Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas);
-Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas);
-Lista_Tipos Listado_de_tipos(Registro vector_informacion[], int total_lineas);
+int F_listado_opciones();
 
+//Listados:
+Lista_Centros F_Listado_de_centros(Registro vector_informacion[], int total_lineas);
+Lista_Actividades F_Listado_de_actividades(Registro vector_informacion[], int total_lineas);
+Lista_Tipos F_Listado_de_tipos(Registro vector_informacion[], int total_lineas);
+
+
+//Selectores y filtros
 int F_selector_centros(Lista_Centros Centros);
 int F_selector_actividades(Lista_Actividades Actividades);
 int F_selector_tipos(Lista_Tipos Tipos);
 S_Fecha_Seleccionada F_selector_horas();
 
-void Opcion_1(Registro vector_informacion[], int total_lineas);
+int F_Cumple_filtros(Registro r, Lista_Centros Centros, Lista_Actividades Actividades, Lista_Tipos Tipos, int centro_filtrado, int actividad_filtrada, int tipo_filtrado, S_Fecha_Seleccionada fecha_filtrada);
 
-void Imprimir_registro_pantalla(Registro r);
-void Imprimir_registro_fichero(FILE *fichero, Registro r);
 
-int Cumple_filtros(
-    Registro r,
-    Lista_Centros Centros,
-    Lista_Actividades Actividades,
-    Lista_Tipos Tipos,
-    int centro_filtrado,
-    int actividad_filtrada,
-    int tipo_filtrado,
-    S_Fecha_Seleccionada fecha_filtrada
-);
+//Funciones principales de cada opcion:
+void F_Opcion_1(Registro vector_informacion[], int total_lineas);
+void F_Opcion_2(Registro vector_informacion[], int total_lineas);
+void F_Opcion_3(Registro vector_informacion[], int total_lineas);
+void F_Opcion_4(Registro vector_informacion[], int total_lineas);
+ 
+//Subfunciones Opcion 1.
+void F_Imprimir_Filtrado(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades, Lista_Tipos Tipos, int centro_filtrado, int actividad_filtrada, int tipo_filtrado, S_Fecha_Seleccionada fecha_filtrada);
+void F_Imprimir_Filtrado_Fichero(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades, Lista_Tipos Tipos, int centro_filtrado, int actividad_filtrada, int tipo_filtrado, S_Fecha_Seleccionada fecha_filtrada);
 
-void F_Imprimir_Filtrado(
-    int total_lineas,
-    Registro vector_informacion[],
-    Lista_Centros Centros,
-    Lista_Actividades Actividades,
-    Lista_Tipos Tipos,
-    int centro_filtrado,
-    int actividad_filtrada,
-    int tipo_filtrado,
-    S_Fecha_Seleccionada fecha_filtrada
-);
 
-void F_Imprimir_Filtrado_Fichero(
-    int total_lineas,
-    Registro vector_informacion[],
-    Lista_Centros Centros,
-    Lista_Actividades Actividades,
-    Lista_Tipos Tipos,
-    int centro_filtrado,
-    int actividad_filtrada,
-    int tipo_filtrado,
-    S_Fecha_Seleccionada fecha_filtrada
-);
+//Subfunciones Opcion 2.
+int F_Opcion_2_1();
+int F_Opcion_2_2();
 
-void Eliminar_Salto_Linea(char cadena[])
-{
-    cadena[strcspn(cadena, "\n")] = '\0';
-}
+float F_Ocupacion_media_centros(Registro vector_informacion[], int total_lineas);
+float F_Ocupacion_media_todos_centros(Registro vector_informacion[], int total_lineas);
+float F_Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_lineas, char centro[]);
 
-// Estadisticas
+float F_Ocupacion_media_actividades(Registro vector_informacion[], int total_lineas);
+float F_Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas);
+float F_Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[]);
 
-int Opcion_2_1();
-int Opcion_2_2();
+void F_Eficiencia_centros(Registro v[], int n);
 
-float Ocupacion_media_centros(Registro vector_informacion[], int total_lineas);
-float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_lineas);
-float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_lineas, char centro[]);
+//Subfunciones Opcion 3.
+int F_Opcion_3_1();
 
-float Ocupacion_media_actividades(Registro vector_informacion[], int total_lineas);
-float Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas);
-float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[]);
+void F_Horas_pico_actividad(Registro v[], int n);
+void F_Actividad_con_mas_demanda(Registro v[], int n);
+void F_Actividad_con_menos_demanda(Registro v[], int n);
+void F_Centro_con_mayor_oferta(Registro v[], int n);
 
-void Horas_pico_actividad(Registro v[], int n);
-void Actividad_con_mas_demanda(Registro v[], int n);
-void Actividad_con_menos_demanda(Registro v[], int n);
-void Centro_con_mayor_oferta(Registro v[], int n);
-void Eficiencia_centros(Registro v[], int n);
-//Modificar fichero
-void Guardar_Fichero(Registro v[], int n);
-void Modificar_Actividad(Registro v[], int n);
-void Anadir_Actividad(Registro v[], int *n);
+void F_Grafico_Centros(Registro vector_informacion[], int total_lineas);
+void F_Grafico_Actividades(Registro vector_informacion[], int total_lineas);
+
+
+//Subfunciones Opcion 4.
+void F_Eliminar_Salto_Linea(char cadena[]);
+void F_Guardar_Fichero(Registro vector_informacion[], int n);
+void F_Modificar_Actividad(Registro v[], int n);
+void F_Anadir_Actividad(Registro v[], int *n);
+
 
 // Funcion main
 
@@ -179,26 +163,7 @@ int main()
 
     int i = 0;
 
-    while (
-        i < N &&
-        fscanf(
-            ARCHIVO,
-            "%d %d %d %s %s %s %s %s %s %d %d %d %s",
-            &vector_informacion[i].fecha.anio,
-            &vector_informacion[i].fecha.mes,
-            &vector_informacion[i].fecha.dia,
-            vector_informacion[i].fecha.dia_semana,
-            vector_informacion[i].horario.hora_ini,
-            vector_informacion[i].horario.hora_fin,
-            vector_informacion[i].actividad.actividad_base,
-            vector_informacion[i].actividad.modalidad,
-            vector_informacion[i].actividad.centro,
-            &vector_informacion[i].aforo.plazas,
-            &vector_informacion[i].aforo.ocupadas,
-            &vector_informacion[i].aforo.libres,
-            vector_informacion[i].actividad.tipo_uso
-        ) == 13
-    )
+    while (i < N &&fscanf(ARCHIVO, "%d %d %d %s %s %s %s %s %s %d %d %d %s", &vector_informacion[i].fecha.anio, &vector_informacion[i].fecha.mes, &vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base, vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, &vector_informacion[i].aforo.plazas, &vector_informacion[i].aforo.ocupadas, &vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso ) == 13)
     {
         i++;
     }
@@ -207,107 +172,31 @@ int main()
     fclose(ARCHIVO);
 
     int opcion_listado;
-    int opcion_estadisticas_1;
-    int opcion_estadisticas_2;
-    int opcion_modificar;
-    float resultado_opcion_centro;
-    float resultado_opcion_actividad;
+
 
     do
     {
-        opcion_listado = listado_opciones();
+        opcion_listado = F_listado_opciones();
 
         switch (opcion_listado)
         {
             case 1:
-                Opcion_1(vector_informacion, total_lineas);
+                F_Opcion_1(vector_informacion, total_lineas);
                 break;
 
             case 2:
-                opcion_estadisticas_1 = Opcion_2_1();
-
-                switch (opcion_estadisticas_1)
-                {
-                    case 1:
-                        do
-                        {
-                            opcion_estadisticas_2 = Opcion_2_2();
-
-                            if (opcion_estadisticas_2 == 1)
-                            {
-                                resultado_opcion_centro = Ocupacion_media_centros(vector_informacion, total_lineas);
-                                printf("\nLa ocupacion media del centro es de: %.2f por ciento\n", resultado_opcion_centro);
-                            }
-                            else if (opcion_estadisticas_2 == 2)
-                            {
-                                resultado_opcion_actividad = Ocupacion_media_actividades(vector_informacion, total_lineas);
-                                printf("\nLa ocupacion media de la actividad es de: %.2f por ciento\n", resultado_opcion_actividad);
-                            }
-                            else
-                            {
-                                printf("\nOpcion no valida. Intente de nuevo.\n");
-                            }
-
-                        } while (opcion_estadisticas_2 != 1 && opcion_estadisticas_2 != 2);
-
-                        break;
-
-                    case 2:
-                        Horas_pico_actividad(vector_informacion, total_lineas);
-                        break;
-
-                    case 3:
-                        Actividad_con_mas_demanda(vector_informacion, total_lineas);
-                        break;
-
-                    case 4:
-                        Actividad_con_menos_demanda(vector_informacion, total_lineas);
-                        break;
-
-                    case 5:
-                        Centro_con_mayor_oferta(vector_informacion, total_lineas);
-                        break;
-
-                    case 6:
-                        Eficiencia_centros(vector_informacion, total_lineas);
-                        break;
-
-                    default:
-                        printf("\nOpcion no valida.\n");
-                        break;
-                }
-
+                F_Opcion_2(vector_informacion, total_lineas);
                 break;
 
             case 3:
-
-  				  printf("\nModificar fichero\n");
-				  printf("-----------------\n");
-    			  printf("1. Sobreescribir actividad\n");
-    			  printf("2. Anadir actividad\n");
-    			  printf("Seleccione una opcion: ");
-				  scanf("%d", &opcion_modificar);
-
- 			      switch(opcion_modificar)
-   				  {
-     				   case 1:
-         			  		Modificar_Actividad(vector_informacion, total_lineas);
-            				Guardar_Fichero(vector_informacion,total_lineas);
-         					break;
-
-     				   case 2:
-           					 Anadir_Actividad(vector_informacion, &total_lineas);
-					         Guardar_Fichero(vector_informacion,total_lineas);
-            				 break;
-            				 
-        				default:
-          				  	printf("Opcion no valida.\n");
-         				  	break;
-  					}
-
-    				break;
+                F_Opcion_3(vector_informacion, total_lineas);
+                break;
 
             case 4:
+                F_Opcion_4(vector_informacion, total_lineas);
+    			break;
+
+            case 5:
                 printf("Hasta pronto!\n");
                 printf("-------------\n");
                 break;
@@ -317,33 +206,37 @@ int main()
                 break;
         }
 
-    } while (opcion_listado != 4);
+    } while (opcion_listado != 5);
 
     return 0;
 }
 
 
-// FUNCIONES
 
+// FUNCIONES:
 
-int listado_opciones()
+int F_listado_opciones()
 {
     int opcion_listado;
 
     printf("\n\n\n");
     printf("BIENVENIDO AL CENTRO DE GESTION DE DATOS DEPORTIVOS DE MADRID\n");
-    printf("-------------------------------------------------------------\n");
-    printf("Listado de opciones\n");
-    printf("-------------------\n");
+    printf("-------------------------------------------------------------\n\n\n");
+    printf("Listado de opciones del programa:\n");
+    printf("--------------------------------\n\n");
     printf("1. Lista de actividades\n");
-    printf("2. Estadisticas\n");
-    printf("3. Modificar el fichero\n");
-    printf("4. Salir\n");
-    printf("Seleccione una opcion: ");
+    printf("Esta opcion permite filtrar y mostrar las actividades que cumplan con los parametros especificados.\n\n");
+    printf("2. Estadisticas.\n");
+    printf("Esta opcion permite calcular diferentes estadisticas sobre la informacion del fichero, como la ocupacion media.\n\n");
+    printf("3. Analisis de datos.\n");
+    printf("Esta opcion permite analizar algunas caracteristicas sobre los datos del fichero, como el centro con mayor demanda.\n\n");
+    printf("4. Modificar el fichero\n\n");
+    printf("5. Salir\n\n");
+    printf("Seleccione una opcion:\t ");
 
     scanf("%d", &opcion_listado);
 
-    while (opcion_listado < 1 || opcion_listado > 4)
+    while (opcion_listado < 1 || opcion_listado > 5)
     {
         printf("Ingrese una opcion valida: ");
         scanf("%d", &opcion_listado);
@@ -352,42 +245,9 @@ int listado_opciones()
     return opcion_listado;
 }
 
+//Listados:
 
-int Opcion_2_1()
-{
-    int opcion_estadisticas_1;
-
-    printf("\nEstadisticas:\n");
-    printf("1. Ocupacion media\n");
-    printf("2. Horas pico segun actividad\n");
-    printf("3. Actividad con mas demanda\n");
-    printf("4. Actividad con menos demanda\n");
-    printf("5. Centro con mayor oferta\n");
-    printf("6. Eficiencia de los centros\n");
-    printf("Seleccione una opcion: ");
-
-    scanf("%d", &opcion_estadisticas_1);
-
-    return opcion_estadisticas_1;
-}
-
-
-int Opcion_2_2()
-{
-    int opcion_estadisticas_2;
-
-    printf("\nOcupacion media:\n");
-    printf("1. Por centro\n");
-    printf("2. Por actividad\n");
-    printf("Seleccione una opcion: ");
-
-    scanf("%d", &opcion_estadisticas_2);
-
-    return opcion_estadisticas_2;
-}
-
-
-Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas)
+Lista_Centros F_Listado_de_centros(Registro vector_informacion[], int total_lineas)
 {
     Lista_Centros resultado;
     int i, j;
@@ -411,13 +271,6 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
         if (repetido == 0 && resultado.num_centros < MAX_CENTROS)
         {
             strcpy(resultado.centros[resultado.num_centros].centro, vector_informacion[i].actividad.centro);
-
-            resultado.centros[resultado.num_centros].ocupacion_media = Ocupacion_media_centro_especifico(
-                vector_informacion,
-                total_lineas,
-                vector_informacion[i].actividad.centro
-            );
-
             resultado.num_centros++;
         }
     }
@@ -425,8 +278,7 @@ Lista_Centros Listado_de_centros(Registro vector_informacion[], int total_lineas
     return resultado;
 }
 
-
-Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int total_lineas)
+Lista_Actividades F_Listado_de_actividades(Registro vector_informacion[], int total_lineas)
 {
     Lista_Actividades resultado;
     int i, j;
@@ -457,8 +309,7 @@ Lista_Actividades Listado_de_actividades(Registro vector_informacion[], int tota
     return resultado;
 }
 
-
-Lista_Tipos Listado_de_tipos(Registro vector_informacion[], int total_lineas)
+Lista_Tipos F_Listado_de_tipos(Registro vector_informacion[], int total_lineas)
 {
     Lista_Tipos resultado;
     int i, j;
@@ -485,10 +336,10 @@ Lista_Tipos Listado_de_tipos(Registro vector_informacion[], int total_lineas)
             resultado.num_tipos++;
         }
     }
-
     return resultado;
 }
 
+//Selectores y filtros:
 
 int F_selector_centros(Lista_Centros Centros)
 {
@@ -699,7 +550,6 @@ int F_selector_actividades(Lista_Actividades Actividades)
     return actividad_seleccionada;
 }
 
-
 int F_selector_tipos(Lista_Tipos Tipos)
 {
     int i;
@@ -716,7 +566,6 @@ int F_selector_tipos(Lista_Tipos Tipos)
     while (pag >= 1 && pag <= pag_max && bandera == 0)
     {
         printf("\nPagina %d/%d\n", pag, pag_max);
-
         printf("0: Todos los tipos\n");
 
         for (i = 0; i < 9; i++)
@@ -739,7 +588,7 @@ int F_selector_tipos(Lista_Tipos Tipos)
             printf("A: Pagina anterior\n");
         }
 
-        printf("Seleccione un tipo de actividad: ");
+        printf("Seleccione un tipo de actividad:\t");
         scanf(" %c", &opcion);
 
         switch (opcion)
@@ -804,7 +653,6 @@ int F_selector_tipos(Lista_Tipos Tipos)
     return tipo_seleccionado;
 }
 
-
 S_Fecha_Seleccionada F_selector_horas()
 {
     char opcion;
@@ -817,19 +665,19 @@ S_Fecha_Seleccionada F_selector_horas()
     {
         case 'y':
         case 'Y':
-            printf("Introduzca el annio de interes: ");
+            printf("Introduzca el annio de interes:\t");
             scanf("%d", &resultado.anio);
 
-            printf("Introduzca el mes de interes: ");
+            printf("Introduzca el mes de interes:\t");
             scanf("%d", &resultado.mes);
 
-            printf("Introduzca el dia de interes: ");
+            printf("Introduzca el dia de interes:\t");
             scanf("%d", &resultado.dia);
 
-            printf("Introduzca la hora minima. Formato HH:MM: ");
+            printf("Introduzca la hora minima. Formato HH:MM:\t");
             scanf("%s", resultado.hora_min);
 
-            printf("Introduzca la hora maxima. Formato HH:MM: ");
+            printf("Introduzca la hora maxima. Formato HH:MM:\t");
             scanf("%s", resultado.hora_max);
             break;
 
@@ -855,99 +703,7 @@ S_Fecha_Seleccionada F_selector_horas()
     return resultado;
 }
 
-
-void Opcion_1(Registro vector_informacion[], int total_lineas)
-{
-    Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
-    int centro_filtrado = F_selector_centros(Centros);
-
-    S_Fecha_Seleccionada fecha_filtrada = F_selector_horas();
-
-    Lista_Actividades Actividades = Listado_de_actividades(vector_informacion, total_lineas);
-    int actividad_filtrada = F_selector_actividades(Actividades);
-
-    Lista_Tipos Tipos = Listado_de_tipos(vector_informacion, total_lineas);
-    int tipo_filtrado = F_selector_tipos(Tipos);
-
-    F_Imprimir_Filtrado(
-        total_lineas,
-        vector_informacion,
-        Centros,
-        Actividades,
-        Tipos,
-        centro_filtrado,
-        actividad_filtrada,
-        tipo_filtrado,
-        fecha_filtrada
-    );
-
-    F_Imprimir_Filtrado_Fichero(
-        total_lineas,
-        vector_informacion,
-        Centros,
-        Actividades,
-        Tipos,
-        centro_filtrado,
-        actividad_filtrada,
-        tipo_filtrado,
-        fecha_filtrada
-    );
-}
-
-
-void Imprimir_registro_pantalla(Registro r)
-{
-    printf(
-        "%d || %d || %d || %s || %s || %s || %s || %s || %s || %d || %d || %d || %s\n",
-        r.fecha.anio,
-        r.fecha.mes,
-        r.fecha.dia,
-        r.fecha.dia_semana,
-        r.horario.hora_ini,
-        r.horario.hora_fin,
-        r.actividad.actividad_base,
-        r.actividad.modalidad,
-        r.actividad.centro,
-        r.aforo.plazas,
-        r.aforo.ocupadas,
-        r.aforo.libres,
-        r.actividad.tipo_uso
-    );
-}
-
-
-void Imprimir_registro_fichero(FILE *fichero, Registro r)
-{
-    fprintf(
-        fichero,
-        "%d %d %d %s %s %s %s %s %s %d %d %d %s\n",
-        r.fecha.anio,
-        r.fecha.mes,
-        r.fecha.dia,
-        r.fecha.dia_semana,
-        r.horario.hora_ini,
-        r.horario.hora_fin,
-        r.actividad.actividad_base,
-        r.actividad.modalidad,
-        r.actividad.centro,
-        r.aforo.plazas,
-        r.aforo.ocupadas,
-        r.aforo.libres,
-        r.actividad.tipo_uso
-    );
-}
-
-
-int Cumple_filtros(
-    Registro r,
-    Lista_Centros Centros,
-    Lista_Actividades Actividades,
-    Lista_Tipos Tipos,
-    int centro_filtrado,
-    int actividad_filtrada,
-    int tipo_filtrado,
-    S_Fecha_Seleccionada fecha_filtrada
-)
+int F_Cumple_filtros(Registro r, Lista_Centros Centros, Lista_Actividades Actividades, Lista_Tipos Tipos, int centro_filtrado, int actividad_filtrada, int tipo_filtrado, S_Fecha_Seleccionada fecha_filtrada)
 {
     int cumple = 1;
 
@@ -981,11 +737,7 @@ int Cumple_filtros(
     // Comprobacion de la fecha y de las horas.
     if (fecha_filtrada.anio != -1)
     {
-        if (
-            r.fecha.anio != fecha_filtrada.anio ||
-            r.fecha.mes != fecha_filtrada.mes ||
-            r.fecha.dia != fecha_filtrada.dia
-        )
+        if (r.fecha.anio != fecha_filtrada.anio || r.fecha.mes != fecha_filtrada.mes || r.fecha.dia != fecha_filtrada.dia)
         {
             cumple = 0;
         }
@@ -995,31 +747,138 @@ int Cumple_filtros(
                 Se comparan las horas como cadenas porque estan en formato HH:MM.
                 En este formato, strcmp funciona correctamente para ordenar horas.
             */
-            if (
-                strcmp(r.horario.hora_ini, fecha_filtrada.hora_min) < 0 ||
-                strcmp(r.horario.hora_fin, fecha_filtrada.hora_max) > 0
-            )
+            if (strcmp(r.horario.hora_ini, fecha_filtrada.hora_min) < 0 || strcmp(r.horario.hora_fin, fecha_filtrada.hora_max) > 0)
             {
                 cumple = 0;
             }
         }
     }
-
     return cumple;
 }
 
+//Funciones principales de cada opcion:
+void F_Opcion_1(Registro vector_informacion[], int total_lineas)
+{
+    Lista_Centros Centros = F_Listado_de_centros(vector_informacion, total_lineas);
+    int centro_filtrado = F_selector_centros(Centros);
 
-void F_Imprimir_Filtrado(
-    int total_lineas,
-    Registro vector_informacion[],
-    Lista_Centros Centros,
-    Lista_Actividades Actividades,
-    Lista_Tipos Tipos,
-    int centro_filtrado,
-    int actividad_filtrada,
-    int tipo_filtrado,
-    S_Fecha_Seleccionada fecha_filtrada
-)
+    S_Fecha_Seleccionada fecha_filtrada = F_selector_horas();
+
+    Lista_Actividades Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
+    int actividad_filtrada = F_selector_actividades(Actividades);
+
+    Lista_Tipos Tipos = F_Listado_de_tipos(vector_informacion, total_lineas);
+    int tipo_filtrado = F_selector_tipos(Tipos);
+
+    F_Imprimir_Filtrado(total_lineas, vector_informacion, Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada);
+    F_Imprimir_Filtrado_Fichero(total_lineas, vector_informacion, Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada);
+}
+
+void F_Opcion_2(Registro vector_informacion[], int total_lineas)
+{
+    int opcion_estadisticas = F_Opcion_2_1();
+    int opcion_estadisticas_media;
+    float resultado_opcion_centro;
+    float resultado_opcion_actividad;
+
+    switch (opcion_estadisticas)
+        {
+            case 1:
+                do{
+                    opcion_estadisticas_media = F_Opcion_2_2();
+                    if (opcion_estadisticas_media == 1)
+                    {
+                        resultado_opcion_centro = F_Ocupacion_media_centros(vector_informacion, total_lineas);
+                        printf("\nLa ocupacion media del centro es de: %.2f %%\n", resultado_opcion_centro);
+                    }
+                    else if (opcion_estadisticas_media == 2)
+                    {
+                        resultado_opcion_actividad = F_Ocupacion_media_actividades(vector_informacion, total_lineas);
+                        printf("\nLa ocupacion media de la actividad es de: %.2f %% \n", resultado_opcion_actividad);
+                    }
+                    else
+                    {
+                        printf("\nOpcion no valida. Intente de nuevo.\n");
+                    }
+                        }while(opcion_estadisticas_media != 1 && opcion_estadisticas_media != 2);
+                        break;
+
+            case 2:
+                F_Eficiencia_centros(vector_informacion, total_lineas);
+                break;
+
+            default:
+                printf("\nOpcion no valida.\n");
+                break;
+        }
+}
+
+void F_Opcion_3(Registro vector_informacion[], int total_lineas)
+{
+
+    int opcion_analisis = F_Opcion_3_1();
+    
+    switch (opcion_analisis)
+        {      
+            case 1:
+                F_Horas_pico_actividad(vector_informacion, total_lineas);
+                break;
+
+            case 2:
+                F_Actividad_con_mas_demanda(vector_informacion, total_lineas);
+                break;
+
+             case 3:
+                F_Actividad_con_menos_demanda(vector_informacion, total_lineas);
+                break;
+                       
+            case 4:
+                F_Centro_con_mayor_oferta(vector_informacion, total_lineas);
+                break;
+            case 5: 
+                F_Grafico_Centros(vector_informacion, total_lineas);
+                break;
+            case 6: 
+                F_Grafico_Actividades(vector_informacion, total_lineas);
+                break;
+
+            default:
+                printf("\nOpcion no valida.\n");
+                break;
+        }
+}
+
+void F_Opcion_4(Registro vector_informacion[], int total_lineas)
+{
+    int opcion_modificar;
+
+    printf("\nModificar fichero:\n");
+	printf("-----------------\n\n");
+    printf("1. Sobreescribir una actividad existente.\n");
+    printf("2. Anadir una actividad nueva.\n");
+    printf("Seleccione una opcion: ");
+    scanf("%d", &opcion_modificar);
+
+ 	switch(opcion_modificar)
+   	{
+     	case 1:
+         	F_Modificar_Actividad(vector_informacion, total_lineas);
+            F_Guardar_Fichero(vector_informacion,total_lineas);
+        break;
+
+     	case 2:
+            F_Anadir_Actividad(vector_informacion, &total_lineas);
+            F_Guardar_Fichero(vector_informacion,total_lineas);
+        break;
+            				 
+    	default:          		
+            printf("Opcion no valida.\n");
+        break;
+  	}
+}
+
+//Subfunciones Opcion 1.
+void F_Imprimir_Filtrado(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades, Lista_Tipos Tipos, int centro_filtrado, int actividad_filtrada, int tipo_filtrado, S_Fecha_Seleccionada fecha_filtrada)
 {
     int i;
     int contador = 0;
@@ -1033,18 +892,9 @@ void F_Imprimir_Filtrado(
 
     for (i = 0; i < total_lineas; i++)
     {
-        if (Cumple_filtros(
-                vector_informacion[i],
-                Centros,
-                Actividades,
-                Tipos,
-                centro_filtrado,
-                actividad_filtrada,
-                tipo_filtrado,
-                fecha_filtrada
-            ))
+        if (F_Cumple_filtros(vector_informacion[i], Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada))
         {
-            Imprimir_registro_pantalla(vector_informacion[i]);
+            printf("%d %d %d %s %s %s %s %s %s %d %d %d %s\n", vector_informacion[i].fecha.anio, vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base, vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
             contador++;
         }
     }
@@ -1052,18 +902,7 @@ void F_Imprimir_Filtrado(
     printf("\nTotal de registros encontrados: %d\n", contador);
 }
 
-
-void F_Imprimir_Filtrado_Fichero(
-    int total_lineas,
-    Registro vector_informacion[],
-    Lista_Centros Centros,
-    Lista_Actividades Actividades,
-    Lista_Tipos Tipos,
-    int centro_filtrado,
-    int actividad_filtrada,
-    int tipo_filtrado,
-    S_Fecha_Seleccionada fecha_filtrada
-)
+void F_Imprimir_Filtrado_Fichero(int total_lineas, Registro vector_informacion[], Lista_Centros Centros, Lista_Actividades Actividades, Lista_Tipos Tipos, int centro_filtrado, int actividad_filtrada, int tipo_filtrado, S_Fecha_Seleccionada fecha_filtrada)
 {
     char opcion;
     int i;
@@ -1086,25 +925,13 @@ void F_Imprimir_Filtrado_Fichero(
                 return;
             }
 
-            fprintf(
-                ARCHIVO_ESCRITURA_FILTRADO,
-                "anio mes dia dia_semana hora_inicio hora_fin actividad_base modalidad centro plazas ocupadas libres tipo_actividad\n"
-            );
+            fprintf(ARCHIVO_ESCRITURA_FILTRADO, "anio mes dia dia_semana hora_inicio hora_fin actividad_base modalidad centro plazas ocupadas libres tipo_actividad\n");
 
             for (i = 0; i < total_lineas; i++)
             {
-                if (Cumple_filtros(
-                        vector_informacion[i],
-                        Centros,
-                        Actividades,
-                        Tipos,
-                        centro_filtrado,
-                        actividad_filtrada,
-                        tipo_filtrado,
-                        fecha_filtrada
-                    ))
+                if (F_Cumple_filtros(vector_informacion[i], Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada))
                 {
-                    Imprimir_registro_fichero(ARCHIVO_ESCRITURA_FILTRADO, vector_informacion[i]);
+                    fprintf(ARCHIVO_ESCRITURA_FILTRADO, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n", vector_informacion[i].fecha.anio, vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base, vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
                     contador++;
                 }
             }
@@ -1126,19 +953,53 @@ void F_Imprimir_Filtrado_Fichero(
     }
 }
 
-
-float Ocupacion_media_centros(Registro vector_informacion[], int total_lineas)
+//Subfunciones Opcion 2.
+int F_Opcion_2_1()
 {
-    Lista_Centros Centros = Listado_de_centros(vector_informacion, total_lineas);
+    int opcion_estadisticas_1;
+
+    printf("\nEstadisticas:\n");
+    printf("1. Ocupacion media\n");
+    printf("2. Eficiencia de un centro\n");
+
+    /* printf("2. Horas pico segun actividad\n");
+    printf("3. Actividad con mas demanda\n");
+    printf("4. Actividad con menos demanda\n");
+    printf("5. Centro con mayor oferta\n");
+    */
+    printf("Seleccione una opcion: ");
+
+    scanf("%d", &opcion_estadisticas_1);
+
+    return opcion_estadisticas_1;
+}
+
+int F_Opcion_2_2()
+{
+    int opcion_estadisticas_2;
+
+    printf("\nOcupacion media:\n");
+    printf("1. Por centro\n");
+    printf("2. Por actividad\n");
+    printf("Seleccione una opcion: ");
+
+    scanf("%d", &opcion_estadisticas_2);
+
+    return opcion_estadisticas_2;
+}
+
+float F_Ocupacion_media_centros(Registro vector_informacion[], int total_lineas)
+{
+    Lista_Centros Centros = F_Listado_de_centros(vector_informacion, total_lineas);
     int centro_seleccionado = F_selector_centros(Centros);
 
     if (centro_seleccionado == -1)
     {
-        return Ocupacion_media_todos_centros(vector_informacion, total_lineas);
+        return F_Ocupacion_media_todos_centros(vector_informacion, total_lineas);
     }
     else
     {
-        return Ocupacion_media_centro_especifico(
+        return F_Ocupacion_media_centro_especifico(
             vector_informacion,
             total_lineas,
             Centros.centros[centro_seleccionado].centro
@@ -1146,8 +1007,7 @@ float Ocupacion_media_centros(Registro vector_informacion[], int total_lineas)
     }
 }
 
-
-float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_lineas)
+float F_Ocupacion_media_todos_centros(Registro vector_informacion[], int total_lineas)
 {
     int i;
     int total_plazas = 0;
@@ -1167,8 +1027,7 @@ float Ocupacion_media_todos_centros(Registro vector_informacion[], int total_lin
     return ((float)total_ocupadas / total_plazas) * 100;
 }
 
-
-float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_lineas, char centro[])
+float F_Ocupacion_media_centro_especifico(Registro vector_informacion[], int total_lineas, char centro[])
 {
     int i;
     int total_plazas = 0;
@@ -1191,28 +1050,22 @@ float Ocupacion_media_centro_especifico(Registro vector_informacion[], int total
     return ((float)total_ocupadas / total_plazas) * 100;
 }
 
-
-float Ocupacion_media_actividades(Registro vector_informacion[], int total_lineas)
+float F_Ocupacion_media_actividades(Registro vector_informacion[], int total_lineas)
 {
-    Lista_Actividades Actividades = Listado_de_actividades(vector_informacion, total_lineas);
+    Lista_Actividades Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
     int actividad_seleccionada = F_selector_actividades(Actividades);
 
     if (actividad_seleccionada == -1)
     {
-        return Ocupacion_media_todas_actividades(vector_informacion, total_lineas);
+        return F_Ocupacion_media_todas_actividades(vector_informacion, total_lineas);
     }
     else
     {
-        return Ocupacion_media_actividad_especifica(
-            vector_informacion,
-            total_lineas,
-            Actividades.actividades[actividad_seleccionada].actividad
-        );
+        return F_Ocupacion_media_actividad_especifica(vector_informacion, total_lineas, Actividades.actividades[actividad_seleccionada].actividad);
     }
 }
 
-
-float Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas)
+float F_Ocupacion_media_todas_actividades(Registro vector_informacion[], int total_lineas)
 {
     int i;
     int total_plazas = 0;
@@ -1232,8 +1085,7 @@ float Ocupacion_media_todas_actividades(Registro vector_informacion[], int total
     return ((float)total_ocupadas / total_plazas) * 100;
 }
 
-
-float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[])
+float F_Ocupacion_media_actividad_especifica(Registro vector_informacion[], int total_lineas, char actividad[])
 {
     int i;
     int total_plazas = 0;
@@ -1256,10 +1108,103 @@ float Ocupacion_media_actividad_especifica(Registro vector_informacion[], int to
     return ((float)total_ocupadas / total_plazas) * 100;
 }
 
-
-void Actividad_con_mas_demanda(Registro v[], int n)
+void F_Eficiencia_centros(Registro v[], int n)
 {
-    Lista_Actividades LA = Listado_de_actividades(v, n);
+    Lista_Centros LC = F_Listado_de_centros(v, n);
+    int i;
+
+    printf("\nEficiencia de los centros:\n");
+
+    for (i = 0; i < LC.num_centros; i++)
+    {
+        float ocupacion = F_Ocupacion_media_centro_especifico(v, n, LC.centros[i].centro);
+        printf("- %s: %.2f%%\n", LC.centros[i].centro, ocupacion);
+    }
+}
+
+//Subfunciones Opcion 3.
+int F_Opcion_3_1()
+{
+    int opcion_analisis;
+
+    printf("\nQue desea saber?\n");
+    printf("1. Horas pico de una actividad.\n");
+    printf("2. Actividad con mas demanda.\n");
+    printf("3. Actividad con menos demanda.\n");
+    printf("4. Centro con mayor oferta de actividades.\n");
+    printf("5. Descargar hoja de calculo con la ocupacion media de cada centro deportivo.");
+    printf("6. Descargar hoja de calculo con la ocupcion media de cada actividad.");
+    printf("Seleccione una opcion:\t");
+
+    scanf("%d", &opcion_analisis);
+
+    return opcion_analisis;
+}
+
+void F_Horas_pico_actividad(Registro v[], int n)
+{
+    Lista_Actividades LA = F_Listado_de_actividades(v, n);
+    int act = F_selector_actividades(LA);
+
+    if (act == -1)
+    {
+        printf("\nDebe seleccionar una actividad concreta.\n");
+        return;
+    }
+
+    char actividad[50];
+    strcpy(actividad, LA.actividades[act].actividad);
+
+    int ocup_hora[24] = {0};
+    int sesiones[24] = {0};
+
+    int i, h;
+
+    for (i = 0; i < n; i++)
+    {
+        if (strcmp(v[i].actividad.actividad_base, actividad) == 0)
+        {
+            h = atoi(v[i].horario.hora_ini);
+
+            if (h >= 0 && h < 24)
+            {
+                ocup_hora[h] += v[i].aforo.ocupadas;
+                sesiones[h]++;
+            }
+        }
+    }
+
+    int mejor_hora = -1;
+    float media;
+    float mejor_media = -1;
+
+    for (h = 0; h < 24; h++)
+    {
+        if (sesiones[h] > 0)
+        {
+            media = (float)ocup_hora[h] / sesiones[h];
+
+            if (media > mejor_media)
+            {
+                mejor_media = media;
+                mejor_hora = h;
+            }
+        }
+    }
+
+    if (mejor_hora != -1)
+    {
+        printf("\nHora pico de %s: %02d:00 (media %.2f personas)\n", actividad, mejor_hora, mejor_media);
+    }
+    else
+    {
+        printf("\nNo hay datos para la actividad %s\n", actividad);
+    }
+}
+
+void F_Actividad_con_mas_demanda(Registro v[], int n)
+{
+    Lista_Actividades LA = F_Listado_de_actividades(v, n);
 
     float max_ocupacion_porcentual = -1;
     char actividad_max_porcentual[50] = "";
@@ -1275,7 +1220,7 @@ void Actividad_con_mas_demanda(Registro v[], int n)
         int ocupacion_absoluta = 0;
 
         // Calculamos la ocupacion porcentual de la actividad actual.
-        ocupacion_porcentual = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
+        ocupacion_porcentual = F_Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
 
         // Calculamos la ocupacion absoluta de la actividad actual.
         for (j = 0; j < n; j++)
@@ -1312,10 +1257,9 @@ void Actividad_con_mas_demanda(Registro v[], int n)
     );
 }
 
-
-void Actividad_con_menos_demanda(Registro v[], int n)
+void F_Actividad_con_menos_demanda(Registro v[], int n)
 {
-    Lista_Actividades LA = Listado_de_actividades(v, n);
+    Lista_Actividades LA = F_Listado_de_actividades(v, n);
 
     float min_ocupacion_porcentual = 999999;
     char actividad_min_porcentual[50] = "";
@@ -1331,7 +1275,7 @@ void Actividad_con_menos_demanda(Registro v[], int n)
         int ocupacion_absoluta = 0;
 
         // Calculamos la ocupacion porcentual de la actividad actual.
-        ocupacion_porcentual = Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
+        ocupacion_porcentual = F_Ocupacion_media_actividad_especifica(v, n, LA.actividades[i].actividad);
 
         // Calculamos la ocupacion absoluta de la actividad actual.
         for (j = 0; j < n; j++)
@@ -1370,10 +1314,9 @@ void Actividad_con_menos_demanda(Registro v[], int n)
     );
 }
 
-
-void Centro_con_mayor_oferta(Registro v[], int n)
+void F_Centro_con_mayor_oferta(Registro v[], int n)
 {
-    Lista_Centros LC = Listado_de_centros(v, n);
+    Lista_Centros LC = F_Listado_de_centros(v, n);
 
     Oferta_Centro oferta_actual;
     Oferta_Centro oferta_max;
@@ -1468,89 +1411,57 @@ void Centro_con_mayor_oferta(Registro v[], int n)
     }
 }
 
-
-void Eficiencia_centros(Registro v[], int n)
+void F_Grafico_Centros(Registro vector_informacion[], int total_lineas)
 {
-    Lista_Centros LC = Listado_de_centros(v, n);
+    Lista_Centros Centros = F_Listado_de_centros(vector_informacion, total_lineas);
     int i;
-
-    printf("\nEficiencia de los centros:\n");
-
-    for (i = 0; i < LC.num_centros; i++)
+    for (i=0; i<=Centros.num_centros; i++)
     {
-        float ocupacion = Ocupacion_media_centro_especifico(v, n, LC.centros[i].centro);
-        printf("- %s: %.2f%%\n", LC.centros[i].centro, ocupacion);
+        Centros.centros[i].ocupacion_media= F_Ocupacion_media_centro_especifico(vector_informacion, total_lineas, Centros.centros[i].centro);
     }
+
+    FILE* GRAFICA;
+    GRAFICA = fopen("Ocupacion_Media_Centros.csv" , "w");
+
+    for (i=0; i<=Centros.num_centros; i++)
+    {
+        fprintf(GRAFICA, "%s;%.2f\n" ,Centros.centros[i].centro ,Centros.centros[i].ocupacion_media);
+    }
+    fclose(GRAFICA);
+
+    printf("La hoja de calculo Ocupacion_Media_Centros.csv se ha descargado correctamente\n");
 }
 
 
-void Horas_pico_actividad(Registro v[], int n)
+void F_Grafico_Actividades(Registro vector_informacion[], int total_lineas)
 {
-    Lista_Actividades LA = Listado_de_actividades(v, n);
-    int act = F_selector_actividades(LA);
-
-    if (act == -1)
+    Lista_Actividades Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
+    int i;
+    for (i=0; i<=Actividades.num_actividades; i++)
     {
-        printf("\nDebe seleccionar una actividad concreta.\n");
-        return;
+        Actividades.actividades[i].ocupacion_media = F_Ocupacion_media_centro_especifico(vector_informacion, total_lineas, Actividades.actividades[i].actividad);
     }
 
-    char actividad[50];
-    strcpy(actividad, LA.actividades[act].actividad);
+    FILE* GRAFICA;
+    GRAFICA = fopen("Ocupacion_Media_Actividades.csv" , "w");
 
-    int ocup_hora[24] = {0};
-    int sesiones[24] = {0};
-
-    int i, h;
-
-    for (i = 0; i < n; i++)
+    for (i=0; i<=Actividades.num_actividades; i++)
     {
-        if (strcmp(v[i].actividad.actividad_base, actividad) == 0)
-        {
-            h = atoi(v[i].horario.hora_ini);
-
-            if (h >= 0 && h < 24)
-            {
-                ocup_hora[h] += v[i].aforo.ocupadas;
-                sesiones[h]++;
-            }
-        }
+        fprintf(GRAFICA, "%s;%.2f\n" ,Actividades.actividades[i].actividad ,Actividades.actividades[i].ocupacion_media);
     }
+    fclose(GRAFICA);
 
-    int mejor_hora = -1;
-    float media;
-    float mejor_media = -1;
-
-    for (h = 0; h < 24; h++)
-    {
-        if (sesiones[h] > 0)
-        {
-            media = (float)ocup_hora[h] / sesiones[h];
-
-            if (media > mejor_media)
-            {
-                mejor_media = media;
-                mejor_hora = h;
-            }
-        }
-    }
-
-    if (mejor_hora != -1)
-    {
-        printf(
-            "\nHora pico de %s: %02d:00 (media %.2f personas)\n",
-            actividad,
-            mejor_hora,
-            mejor_media
-        );
-    }
-    else
-    {
-        printf("\nNo hay datos para la actividad %s\n", actividad);
-    }
+    printf("La hoja de calculo Ocupacion_Media_Actividades.csv se ha descargado correctamente\n");
 }
 
-void Guardar_Fichero(Registro v[], int n)
+
+//Subfunciones Opcion 4.
+void F_Eliminar_Salto_Linea(char cadena[])
+{
+    cadena[strcspn(cadena, "\n")] = '\0';
+}
+
+void F_Guardar_Fichero(Registro vector_informacion[], int n)
 {
     FILE *f;
     int i;
@@ -1566,15 +1477,14 @@ void Guardar_Fichero(Registro v[], int n)
 
     for (i = 0; i < n; i++)
     {
-        Imprimir_registro_fichero(f, v[i]);
+        fprintf(f, "%d %d %d %s %s %s %s %s %s %d %d %d %s\n", vector_informacion[i].fecha.anio, vector_informacion[i].fecha.mes, vector_informacion[i].fecha.dia, vector_informacion[i].fecha.dia_semana, vector_informacion[i].horario.hora_ini, vector_informacion[i].horario.hora_fin, vector_informacion[i].actividad.actividad_base, vector_informacion[i].actividad.modalidad, vector_informacion[i].actividad.centro, vector_informacion[i].aforo.plazas, vector_informacion[i].aforo.ocupadas, vector_informacion[i].aforo.libres, vector_informacion[i].actividad.tipo_uso);
     }
 
     fclose(f);
     printf("\nFichero actualizado correctamente.\n");
 }
 
-
-void Anadir_Actividad(Registro v[], int *n)
+void F_Anadir_Actividad(Registro v[], int *n)
 {
     Registro nuevo;
     if (*n >= N)
@@ -1586,54 +1496,54 @@ void Anadir_Actividad(Registro v[], int *n)
     printf("\nNueva actividad\n");
     printf("----------------\n");
 
-    printf("Anio: ");
+    printf("Introduzca el anio de la actividad:\t");
     scanf("%d", &nuevo.fecha.anio);
 
-    printf("Mes: ");
+    printf("Introduzca el mes de la actividad:\t");
     scanf("%d", &nuevo.fecha.mes);
 
-    printf("Dia: ");
+    printf("Introduzca el dia de la actividad:\t");
     scanf("%d", &nuevo.fecha.dia);
 
     getchar();
 
-    printf("Dia semana: ");
+    printf("Introduzca el dia de la semana de la actividad:\t ");
     fgets(nuevo.fecha.dia_semana, 11, stdin);
-    Eliminar_Salto_Linea(nuevo.fecha.dia_semana);
+    F_Eliminar_Salto_Linea(nuevo.fecha.dia_semana);
 
-    printf("Hora inicio: ");
-    fgets(nuevo.horario.hora_ini, 6, stdin);
-    Eliminar_Salto_Linea(nuevo.horario.hora_ini);
+    printf("Introduzca la hora de inicio de la actividad. (Formato: HH:MM):\t ");
+    fgets(  nuevo.horario.hora_ini, 10, stdin);
+    F_Eliminar_Salto_Linea(nuevo.horario.hora_ini);
 
-    printf("Hora fin: ");
-    fgets(nuevo.horario.hora_fin, 6, stdin);
-    Eliminar_Salto_Linea(nuevo.horario.hora_fin);
+    printf("Introduzca la hora de fin de la actividad. (Formato: HH:MM):\t ");
+    fgets(  nuevo.horario.hora_fin, 10, stdin);
+    F_Eliminar_Salto_Linea(nuevo.horario.hora_fin);
 
-    printf("Actividad: ");
+    printf("Introduzca la actividad:\t");
     fgets(nuevo.actividad.actividad_base, 50, stdin);
-    Eliminar_Salto_Linea(nuevo.actividad.actividad_base);
+    F_Eliminar_Salto_Linea(nuevo.actividad.actividad_base);
 
-    printf("Modalidad: ");
+    printf("Introduzca la modalidad de la actividad:\t");
     fgets(nuevo.actividad.modalidad, 50, stdin);
-    Eliminar_Salto_Linea(nuevo.actividad.modalidad);
+    F_Eliminar_Salto_Linea(nuevo.actividad.modalidad);
 
-    printf("Centro: ");
+    printf("Introduzca el centro de la actividad:\t");
     fgets(nuevo.actividad.centro, 50, stdin);
-    Eliminar_Salto_Linea(nuevo.actividad.centro);
+    F_Eliminar_Salto_Linea(nuevo.actividad.centro);
 
-    printf("Plazas: ");
+    printf("Introduzca el numero de plazas totales de la actividad:\t");
     scanf("%d", &nuevo.aforo.plazas);
 
-    printf("Ocupadas: ");
+    printf("Introduzca el numero de plazas ocupadas de la actividad:\t");
     scanf("%d", &nuevo.aforo.ocupadas);
 
     nuevo.aforo.libres = nuevo.aforo.plazas - nuevo.aforo.ocupadas;
 
     getchar();
 
-    printf("Tipo uso: ");
+    printf("Introduzca el tipo de uso de la actividad:\t");
     fgets(nuevo.actividad.tipo_uso, 50, stdin);
-    Eliminar_Salto_Linea(nuevo.actividad.tipo_uso);
+    F_Eliminar_Salto_Linea(nuevo.actividad.tipo_uso);
 
     v[*n] = nuevo;
 
@@ -1642,8 +1552,7 @@ void Anadir_Actividad(Registro v[], int *n)
     printf("\nActividad anadida correctamente.\n");
 }
 
-
-void Modificar_Actividad(Registro v[], int n)
+void F_Modificar_Actividad(Registro v[], int n)
 {
     int i;
     int opcion;
@@ -1653,13 +1562,7 @@ void Modificar_Actividad(Registro v[], int n)
 
     for (i = 0; i < n; i++)
     {
-        printf(
-            "%d -> %s | %s | %s\n",
-            i,
-            v[i].actividad.actividad_base,
-            v[i].actividad.centro,
-            v[i].horario.hora_ini
-        );
+        printf("%d -> %s | %s | %s\n", i, v[i].actividad.actividad_base, v[i].actividad.centro, v[i].horario.hora_ini);
     }
 
     printf("\nSeleccione el indice de la actividad: ");
@@ -1673,31 +1576,35 @@ void Modificar_Actividad(Registro v[], int n)
 
     getchar();
 
-    printf("\nNuevo nombre actividad: ");
+    printf("\nIntroduzca el nuevo nombre actividad:\t");
     fgets(v[opcion].actividad.actividad_base, 50, stdin);
-    Eliminar_Salto_Linea(v[opcion].actividad.actividad_base);
+    F_Eliminar_Salto_Linea(v[opcion].actividad.actividad_base);
 
-    printf("Nueva modalidad: ");
+    printf("Introduzca la nueva modalidad de la actividad:\t");
     fgets(v[opcion].actividad.modalidad, 50, stdin);
-    Eliminar_Salto_Linea(v[opcion].actividad.modalidad);
+    F_Eliminar_Salto_Linea(v[opcion].actividad.modalidad);
 
-    printf("Nuevo centro: ");
+    printf("Introduzca el nuevo centro donde se realiza la actividad:\t");
     fgets(v[opcion].actividad.centro, 50, stdin);
-    Eliminar_Salto_Linea(v[opcion].actividad.centro);
+    F_Eliminar_Salto_Linea(v[opcion].actividad.centro);
 
-    printf("Nuevas plazas: ");
+    printf("Introduzca el nuevo numero de plazas de la actividad:\t");
     scanf("%d", &v[opcion].aforo.plazas);
 
-    printf("Nuevas ocupadas: ");
+    printf("Introduzca el nuevo numero de plazas ocupadas de la actividad:\t");
     scanf("%d", &v[opcion].aforo.ocupadas);
 
     v[opcion].aforo.libres = v[opcion].aforo.plazas - v[opcion].aforo.ocupadas;
 
     getchar();
 
-    printf("Nuevo tipo uso: ");
+    printf("Introduzca el nuevo tipo de uso de la actividad:\t");
     fgets(v[opcion].actividad.tipo_uso, 50, stdin);
-    Eliminar_Salto_Linea(v[opcion].actividad.tipo_uso);
+    F_Eliminar_Salto_Linea(v[opcion].actividad.tipo_uso);
 
     printf("\nActividad modificada correctamente.\n");
 }
+
+
+
+
