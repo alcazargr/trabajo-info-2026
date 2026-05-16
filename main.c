@@ -762,13 +762,14 @@ void F_Opcion_1(Registro vector_informacion[], int total_lineas)
     Lista_Centros Centros = F_Listado_de_centros(vector_informacion, total_lineas);
     int centro_filtrado = F_selector_centros(Centros);
 
-    S_Fecha_Seleccionada fecha_filtrada = F_selector_horas();
 
     Lista_Actividades Actividades = F_Listado_de_actividades(vector_informacion, total_lineas);
     int actividad_filtrada = F_selector_actividades(Actividades);
 
     Lista_Tipos Tipos = F_Listado_de_tipos(vector_informacion, total_lineas);
     int tipo_filtrado = F_selector_tipos(Tipos);
+
+    S_Fecha_Seleccionada fecha_filtrada = F_selector_horas();
 
     F_Imprimir_Filtrado(total_lineas, vector_informacion, Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada);
     F_Imprimir_Filtrado_Fichero(total_lineas, vector_informacion, Centros, Actividades, Tipos, centro_filtrado, actividad_filtrada, tipo_filtrado, fecha_filtrada);
