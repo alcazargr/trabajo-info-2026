@@ -226,7 +226,9 @@ int F_listado_opciones()
     printf("Esta opcion permite calcular diferentes estadisticas sobre la informacion del fichero, como la ocupacion media.\n\n");
     printf("3. Analisis de datos.\n");
     printf("Esta opcion permite analizar algunas caracteristicas sobre los datos del fichero, como el centro con mayor demanda.\n\n");
-    printf("4. Modificar el fichero\n\n");
+    printf("4. Modificar el fichero\n");
+    printf("Esta opcion permite realizar diversas modificaciones al fichero.\n\n");
+
     printf("5. Salir\n\n");
     printf("Seleccione una opcion:\t ");
 
@@ -327,7 +329,7 @@ int F_selector_centros(Lista_Centros Centros)
 {
     int i;
     int indice_real;
-    int pag_max = (Centros.num_centros + 7) / 8;
+    int pag_max = (Centros.num_centros + 8) / 9;
     int pag = 1;
     char opcion;
     int bandera = 0;
@@ -340,18 +342,19 @@ int F_selector_centros(Lista_Centros Centros)
     {
         printf("\nPagina %d/%d\n", pag, pag_max);
 
-        printf("0: Volver al menu principal\n");
-        printf("1: Todos los centros\n");
+        printf("x: Volver al menu principal\n");
+        printf("0: Todos los centros\n\n");
 
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 9; i++)
         {
-            indice_real = i + 8 * (pag - 1);
+            indice_real = i + 9 * (pag - 1);
 
             if (indice_real < Centros.num_centros)
             {
-                printf("%d: %s\n", i + 2, Centros.centros[indice_real].centro);
+                printf("%d: %s\n", i + 1, Centros.centros[indice_real].centro);
             }
         }
+        printf("\n");
 
         if (pag < pag_max)
         {
@@ -391,17 +394,19 @@ int F_selector_centros(Lista_Centros Centros)
                     printf("Ya esta en la primera pagina.\n");
                 }
                 break;
-
-            case '0':
+            
+            case 'X':
+            case 'x':
                 centro_seleccionado = -2;
                 bandera = 1;
                 break;
 
-            case '1':
+            case '0':
                 centro_seleccionado = -1;
                 bandera = 1;
                 break;
-
+            
+            case '1':
             case '2':
             case '3':
             case '4':
@@ -411,7 +416,7 @@ int F_selector_centros(Lista_Centros Centros)
             case '8':
             case '9':
                 numero_seleccionado = opcion - '0';
-                centro_seleccionado = (numero_seleccionado - 2) + 8 * (pag - 1);
+                centro_seleccionado = (numero_seleccionado - 1) + 9 * (pag - 1);
 
                 if (centro_seleccionado >= Centros.num_centros)
                 {
@@ -467,7 +472,7 @@ int F_selector_actividades(Lista_Actividades Actividades)
 {
     int i;
     int indice_real;
-    int pag_max = (Actividades.num_actividades + 7) / 8;
+    int pag_max = (Actividades.num_actividades + 8) / 9;
     int pag = 1;
     char opcion;
     int bandera = 0;
@@ -479,19 +484,20 @@ int F_selector_actividades(Lista_Actividades Actividades)
     while (pag >= 1 && pag <= pag_max && bandera == 0)
     {
         printf("\nPagina %d/%d\n", pag, pag_max);
+        
+        printf("x: Volver al menu principal\n");
+        printf("0: Todas las actividades\n\n");
 
-        printf("0: Volver al menu principal\n");
-        printf("1: Todas las actividades\n");
-
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 9; i++)
         {
-            indice_real = i + 8 * (pag - 1);
+            indice_real = i + 9 * (pag - 1);
 
             if (indice_real < Actividades.num_actividades)
             {
-                printf("%d: %s\n", i + 2, Actividades.actividades[indice_real].actividad);
+                printf("%d: %s\n", i + 1, Actividades.actividades[indice_real].actividad);
             }
         }
+        printf("\n");
 
         if (pag < pag_max)
         {
@@ -531,17 +537,19 @@ int F_selector_actividades(Lista_Actividades Actividades)
                     printf("Ya esta en la primera pagina.\n");
                 }
                 break;
-
-            case '0':
+            
+            case 'X':
+            case 'x':
                 actividad_seleccionada = -2;
                 bandera = 1;
                 break;
 
-            case '1':
+            case '0':
                 actividad_seleccionada = -1;
                 bandera = 1;
                 break;
-
+        
+            case '1':
             case '2':
             case '3':
             case '4':
@@ -551,7 +559,7 @@ int F_selector_actividades(Lista_Actividades Actividades)
             case '8':
             case '9':
                 numero_seleccionado = opcion - '0';
-                actividad_seleccionada = (numero_seleccionado - 2) + 8 * (pag - 1);
+                actividad_seleccionada = (numero_seleccionado - 1) + 9 * (pag - 1);
 
                 if (actividad_seleccionada >= Actividades.num_actividades)
                 {
@@ -606,7 +614,7 @@ int F_selector_tipos(Lista_Tipos Tipos)
 {
     int i;
     int indice_real;
-    int pag_max = (Tipos.num_tipos + 7) / 8;
+    int pag_max = (Tipos.num_tipos + 8) / 9;
     int pag = 1;
     char opcion;
     int bandera = 0;
@@ -619,18 +627,19 @@ int F_selector_tipos(Lista_Tipos Tipos)
     {
         printf("\nPagina %d/%d\n", pag, pag_max);
 
-        printf("0: Volver al menu principal\n");
-        printf("1: Todos los tipos\n");
+        printf("x: Volver al menu principal\n");
+        printf("0: Todos los tipos\n\n");
 
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 9; i++)
         {
-            indice_real = i + 8 * (pag - 1);
+            indice_real = i + 9 * (pag - 1);
 
             if (indice_real < Tipos.num_tipos)
             {
-                printf("%d: %s\n", i + 2, Tipos.tipos[indice_real].tipo);
+                printf("%d: %s\n", i + 1, Tipos.tipos[indice_real].tipo);
             }
         }
+        printf("\n");
 
         if (pag < pag_max)
         {
@@ -670,17 +679,19 @@ int F_selector_tipos(Lista_Tipos Tipos)
                     printf("Ya esta en la primera pagina.\n");
                 }
                 break;
-
-            case '0':
+            
+            case 'X':
+            case 'x':
                 tipo_seleccionado = -2;
                 bandera = 1;
                 break;
 
-            case '1':
+            case '0':
                 tipo_seleccionado = -1;
                 bandera = 1;
                 break;
-
+            
+            case '1':
             case '2':
             case '3':
             case '4':
@@ -690,7 +701,7 @@ int F_selector_tipos(Lista_Tipos Tipos)
             case '8':
             case '9':
                 numero_seleccionado = opcion - '0';
-                tipo_seleccionado = (numero_seleccionado - 2) + 8 * (pag - 1);
+                tipo_seleccionado = (numero_seleccionado - 1) + 9 * (pag - 1);
 
                 if (tipo_seleccionado >= Tipos.num_tipos)
                 {
